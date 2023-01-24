@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load bootstrap4 %}
+{% load static %}
+{% if 'use_i18n'|bootstrap_setting %}
+    {% load i18n %}
+    {% get_current_language as LANGUAGE_CODE %}
+{% endif %}
+<html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+
+    <title> {% block title %}{% endblock %} </title>
+
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="/static/assets/images/icons/favicon.png"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/bootstrap/css/bootstrap.min.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css?{% now 'U' %}">
+
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/fonts/iconic/css/material-design-iconic-font.min.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/fonts/linearicons-v1.0.0/icon-font.min.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/animate/animate.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/css-hamburgers/hamburgers.min.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/animsition/css/animsition.min.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/select2/select2.min.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/daterangepicker/daterangepicker.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/slick/slick.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/MagnificPopup/magnific-popup.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/vendor/perfect-scrollbar/perfect-scrollbar.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/util.css?{% now 'U' %}">
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/main.css?{% now 'U' %}">
+    <!--===============================================================================================-->
+
+    {% block extra_head %}{% endblock %}
+
+</head>
+<body class="animsition">
+
+
+{% include 'includes/header.html' %}
+
+
+{% block content %}{% endblock %}
+
+
+{% include 'includes/footer.html' %}
+
+
+{% block extra_script %}{% endblock %}
+
+
+{% include 'includes/scripts.html' %}
+
+
+</body>
+</html>

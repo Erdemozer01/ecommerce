@@ -1,0 +1,95 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Üye Olun{% endblock %}
+
+{% block content %}
+    <section class="bg0 p-t-104 p-b-116">
+        <div class="container">
+            <div class="flex-w flex-tr">
+                <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-success shadow-soft fade show" role="alert">
+                                <span class="alert-inner--icon">
+                                    <span class="fas fa-fire"></span>
+                                </span>
+                                <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post">
+                        <h4 class="mtext-105 cl2 txt-center p-b-30">
+                            Üye Olun
+                        </h4>
+                        <p class="mtext-105 cl2 p-b-30">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                        </p>
+                        <p class="m-b-5 txt-center"><a href="#">Giriş yap </a></p>
+                        <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer mt-2"
+                                type="submit">
+                            Üye Ol
+                        </button>
+                        <a href="{% url 'anasayfa' %}">
+                            <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer mt-3"
+                                    type="button">
+                                Anasayfa
+                            </button>
+                        </a>
+                    </form>
+                </div>
+
+                <div class="size-210 bor10 flex-w flex-col-m p-lr-93 p-tb-30 p-lr-15-lg w-full-md">
+                    <div class="flex-w w-full p-b-42">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-map-marker"></span>
+						</span>
+
+                        <div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Adres
+							</span>
+
+                            <p class="stext-115 cl6 size-213 p-t-18">
+                                Coza Store Center 8th floor, 379 Hudson St, New York, NY 10018 US
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex-w w-full p-b-42">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-phone-handset"></span>
+						</span>
+
+                        <div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Bize Ulaşın
+							</span>
+
+                            <p class="stext-115 cl1 size-213 p-t-18">
+                                +1 800 1236879
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex-w w-full">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-envelope"></span>
+						</span>
+
+                        <div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Mail Atın
+							</span>
+
+                            <p class="stext-115 cl1 size-213 p-t-18">
+                                contact@example.com
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

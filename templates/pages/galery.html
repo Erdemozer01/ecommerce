@@ -1,0 +1,100 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Galeri{% endblock %}
+
+{% block content %}
+    <!-- Product -->
+    <div class="bg0 m-t-23 p-b-140" style="margin-top: 10%">
+        <div class="container">
+            <div class="flex-w flex-sb-m p-b-52">
+                <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+                        Hepsi
+                    </button>
+                    {% for categoriy in object_list %}
+                        {% ifchanged categoriy.category.title %}
+                            <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter=".{{ categoriy.category.slug }}">{{ categoriy.category.title.title }}</button>
+                        {% endifchanged %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row isotope-grid sidebar-gallery">
+                {% for product in object_list %}
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item
+                        {% if product.category %}{{ product.category|slugify }}{% endif %} {{ product.category.slug }}">
+                        <!-- Block2 -->
+                        <div class=" gallery-lb w-full">
+                            <div class="mfp-gallery m-b-10">
+                                <a class="item-gallery bg-img1" href="{{ product.image.url }}" data-lightbox="gallery"
+                                   style="background-image: url({{ product.image.url }});"></a>
+                                <p class="txt-center">{{ product.title }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <h3 class="txt-center txt-dark mx-auto">Görüntü Bulunamadı</h3>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Pagination -->
+    <div class="flex-c-m flex-w w-full p-t-38">
+        <div class="flex-c-m trans-04 m-all-7">
+            <nav>
+                <ul class="flex-c-m trans-04 m-all-7">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" aria-label="ilk sayfa" title="ilk sayfa"
+                               href="?page=1">
+                                <span class="fa fa-angle-double-left"></span>
+                            </a>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link rounded" aria-label="önceki sayfa"
+                               title="önceki sayfa"
+                               href="?page={{ page_obj.previous_page_number }}">
+                                <span class="fa fa-arrow-left"></span>
+                            </a>
+                        </li>
+
+                    {% endif %}
+                    {% for number in page_obj.paginator.page_range %}
+                        {% if page_obj.number == number %}
+                            <li class="page-item active">
+                                <a class="page-link" href="#">{{ number }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ number }}">{{ number }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link rounded" aria-label="first link"
+                               title="sonraki sayfa"
+                               href="?page={{ page_obj.next_page_number }}">
+                                <span class="fa fa-arrow-right"></span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" aria-label="first link" title="son sayfa"
+                               href="?page={{ page_obj.paginator.num_pages }}">
+                                <span class="fa fa-angle-double-right"></span>
+                            </a>
+                        </li>
+
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" aria-label="first link"
+                               href="#">
+                                <span class="fa fa-angle-double-right"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}

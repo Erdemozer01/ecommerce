@@ -1,0 +1,723 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Tüm Ürünler{% endblock %}
+
+{% block content %}
+    <!-- Product -->
+    <div class="bg0 m-t-23 p-b-140" style="margin-top: 10%">
+        <div class="container">
+            <div class="flex-w flex-sb-m p-b-52">
+                <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                    {% if 'arama' in request.build_absolute_uri %}
+                        <a href="{% url 'store:all_products' %}">
+                            <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
+                                Tüm Ürünler
+                            </button>
+                        </a>
+                        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+                            Arama Sonuçları
+                        </button>
+                    {% else %}
+                        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+                            Tüm Ürünler
+                        </button>
+                        {% for categoriy in categoriys %}
+                            <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+                                    data-filter=".{{ categoriy.slug }}">
+                                {{ categoriy.title }}
+                            </button>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            {% if product_list %}
+                <div class="row isotope-grid">
+                    {% for product in product_list %}
+                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item
+                        {% if product.label %}{{ product.label|slugify }}{% endif %} {{ product.category.slug }}">
+                            <!-- Block2 -->
+                            <div class="block2">
+                                <div class="block2-pic hov-img0 {% if product.label %}label-new{% endif %}"
+                                     data-label="{{ product.label }}">
+                                    <a href="{% url 'store:product_detail' product.category.title.lower|slugify product.slug %}">
+                                        <img src="{{ product.image1.url }}" alt="{{ product.title }}">
+                                    </a>
+
+                                </div>
+
+                                <div class="block2-txt flex-w flex-t p-t-14">
+                                    <div class="block2-txt-child1 flex-col-l ">
+                                        <a href="{% url 'store:product_detail' product.category.title.lower|slugify product.slug %}"
+                                           class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                            {{ product.title|title }}
+                                        </a>
+
+                                        {% if product.new_price %}
+                                            <span class="stext-105 cl3">
+									            ${{ product.new_price }}
+                                                <del>${{ product.price }}</del>
+								            </span>
+                                        {% else %}
+                                            <span class="stext-105 cl3">${{ product.price }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="block2-txt-child2 flex-r p-t-3">
+                                        <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                            <img class="icon-heart1 dis-block trans-04"
+                                                 src="/static/assets/images/icons/icon-heart-01.png"
+                                                 alt="ICON">
+                                            <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                                 src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <h3 class="txt-center txt-dark mx-auto">Ürün Bulunamadı</h3>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="row isotope-grid">
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0 label-new" data-label="New">
+                                <img src="/static/assets/images/product-01.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="/static/assets/product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Esprit Ruffle Shirt
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$16.64
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-02.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="/static/assets/block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Herschel supply
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$35.31
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-03.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Only Check Trouser
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$25.50
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-04.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Classic Trench Coat
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$75.00
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-05.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Front Pocket Jumper
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$34.75
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item watches">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-06.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Vintage Inspired Classic
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$93.20
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-07.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Shirt in Stretch Cotton
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$52.66
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-08.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Pieces Metallic Printed
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$18.96
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item shoes">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-09.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Converse All Star Hi Plimsolls
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$75.00
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-10.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Femme T-Shirt In Stripe
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$25.85
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-11.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Herschel supply
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$63.16
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-12.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Herschel supply
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$63.15
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-13.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        T-Shirt with Sleeve
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$18.49
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-14.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Pretty Little Thing
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$54.79
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item watches">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-15.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Mini Silver Mesh Watch
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$86.85
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                        <!-- Block2 -->
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="/static/assets/images/product-16.jpg" alt="IMG-PRODUCT">
+
+                                <a href="#"
+                                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l ">
+                                    <a href="product-detail.html"
+                                       class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        Square Neck Back
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+									$29.64
+								</span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                        <img class="icon-heart1 dis-block trans-04"
+                                             src="/static/assets/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                             src="/static/assets/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+    <!-- Pagination -->
+    <div class="flex-c-m flex-w w-full p-t-38">
+        <div class="flex-c-m trans-04 m-all-7">
+            <nav>
+                <ul class="flex-c-m trans-04 m-all-7">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" aria-label="ilk sayfa" title="ilk sayfa"
+                               href="?page=1">
+                                <span class="fa fa-angle-double-left"></span>
+                            </a>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link rounded" aria-label="önceki sayfa"
+                               title="önceki sayfa"
+                               href="?page={{ page_obj.previous_page_number }}">
+                                <span class="fa fa-arrow-left"></span>
+                            </a>
+                        </li>
+
+                    {% endif %}
+                    {% for number in page_obj.paginator.page_range %}
+                        {% if page_obj.number == number %}
+                            <li class="page-item active">
+                                <a class="page-link" href="#">{{ number }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ number }}">{{ number }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link rounded" aria-label="first link"
+                               title="sonraki sayfa"
+                               href="?page={{ page_obj.next_page_number }}">
+                                <span class="fa fa-arrow-right"></span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" aria-label="first link" title="son sayfa"
+                               href="?page={{ page_obj.paginator.num_pages }}">
+                                <span class="fa fa-angle-double-right"></span>
+                            </a>
+                        </li>
+
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" aria-label="first link"
+                               href="#">
+                                <span class="fa fa-angle-double-right"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
