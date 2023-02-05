@@ -48,7 +48,7 @@
                                                 </div>
                                             </td>
                                             {% with sayi=cart.quantity price=cart.product.price %}
-                                                <td class="column-5">${{ sayi|mul:price|floatformat:2 }}</td>
+                                                <td class="column-5">$ {{ sayi|mul:price|floatformat:2 }}</td>
                                             {% endwith %}
                                             <td class="column-5">
                                                 <a href="{% url 'carts:delete_item' request.user.id cart.product.product_code %}">
@@ -60,8 +60,8 @@
                                 </table>
                                 <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                                     <div class="flex-w flex-m m-r-20 m-tb-5">
-                                        <div class="flex-c-m stext-101 cl2 size-118 p-lr-15 trans-04 m-tb-5">
-                                            Toplam: {{ total|floatformat:2 }}
+                                        <div class="flex-c-m stext-101 cl2 size-118 p-lr-15 trans-04 m-tb-5 ">
+                                            <td class="column-5">Toplam: $ {{ total|floatformat:2 }}</td>
                                         </div>
                                     </div>
                                 </div>
