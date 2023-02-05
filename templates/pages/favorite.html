@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% block title %}Favorilerim{% endblock %}
+{% load mathfilters %}
+{% block content %}
+
+    <!-- Shoping Cart -->
+    <form class="bg0 p-t-75 p-b-85">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-xl-12 m-lr-auto m-b-50 mt-5">
+                    <div class="m-l-25 m-r--38 m-lr-0-xl ">
+                        <div class="wrap-table-shopping-cart ">
+
+                            {% if my_favorites %}
+                                <caption><b>Favorilerim</b></caption>
+                                <table class="table-shopping-cart">
+                                <tr class="table_head ">
+                                    <th class="column-1">Ürün</th>
+                                    <th class="column-2"></th>
+                                    <th class="column-3">Fiyat</th>
+                                    <th class="column-4 ">Sepete Ekle</th>
+                                    <th class="column-5">Sil</th>
+                                </tr>
+                                {% for favorite in my_favorites %}
+                                    <tr class="table_row">
+                                        <td class="column-1">
+                                            <div class="how-itemcart1">
+                                                <img src="{{ favorite.image1.url }}" alt="IMG">
+                                            </div>
+                                        </td>
+                                        <td class="column-2"><a
+                                                href="{% url 'store:product_detail' favorite.category.title.lower|slugify favorite.slug %}">
+                                            {{ favorite.title }}
+                                        </a></td>
+                                        <td class="column-3">$ {{ favorite.price }}</td>
+
+
+                                        <td class="column-5">
+                                            <a href="{% url 'carts:add_cart' request.user favorite.product_code %}"><i
+                                                    class="fa fa-plus"></i></a></td>
+
+                                        <td class="column-5"><a
+                                                href="{% url 'delete_item_favorite' favorite.slug %}"><i
+                                                class="fa fa-remove"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <p class="txt-center">Favori listenizde ürün bulunamadı</p>
+                            {% endif %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

@@ -20,7 +20,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Kullanıcı Adı', related_name='profile')
     first_name = models.CharField(max_length=150, verbose_name="Ad")
     last_name = models.CharField(max_length=150, verbose_name="Soyad")
-    email = models.EmailField(verbose_name="Email", unique=True)
+    email = models.EmailField(verbose_name="Email")
     avatar = models.ImageField(upload_to=avatar, blank=True, verbose_name='Avatar:')
     gender = models.CharField(max_length=30, choices=Gender, default="", verbose_name='Cinsiyet', blank=True)
     location = models.CharField(max_length=100, verbose_name='Yaşadığı şehir', blank=True)

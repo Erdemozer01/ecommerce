@@ -1,8 +1,14 @@
 from django import forms
-from .models import OptionsChildModel
+from .models import Comments, ProductOptionsNameModel, ProductOptions
 
 
-class OptionsModelForm(forms.ModelForm):
+class ProductOptionsForm(forms.ModelForm):
     class Meta:
-        model = OptionsChildModel
+        model = ProductOptions
         fields = ['options']
+
+
+class ProductCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = ['rating', 'comment']

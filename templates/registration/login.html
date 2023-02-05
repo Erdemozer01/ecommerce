@@ -8,6 +8,13 @@
         <div class="container">
             <div class="flex-w flex-tr">
                 <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-success shadow-soft fade show" role="alert">
+                                <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                     <form method="post">
                         <h4 class="mtext-105 cl2 txt-center p-b-30">
                             Giriş Yap
@@ -16,11 +23,17 @@
                             {% csrf_token %}
                             {% bootstrap_form form %}
                         </p>
-                        <p class="m-b-5 txt-center"><a href="{% url 'accounts:register' %}">Üye değilmisiniz ? </a></p>
+
                         <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer mt-2"
                                 type="submit">
-                            Giriş
+                            GİRİŞ YAP
                         </button>
+                        <a href="{% url 'accounts:register' %}">
+                            <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer mt-3"
+                                    type="button">
+                                ÜYE OL
+                            </button>
+                        </a>
                         <a href="{% url 'anasayfa' %}">
                             <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer mt-3"
                                     type="button">

@@ -51,8 +51,8 @@ class Product(models.Model):
         NO_STOCK = 'SY', 'Satıştan Kaldırıldı'
         IN_STOCK = 'SV', 'Satışta'
 
-    category = models.ForeignKey(Category, verbose_name="Kategori", related_name='product', on_delete=models.CASCADE)
-    product_code = models.UUIDField(default=uuid.uuid4, editable=False, verbose_name='Ürün Kodu')
+    category = models.ForeignKey(Category, verbose_name="Kategori", related_name='product_category', on_delete=models.CASCADE)
+    product_code = models.CharField(default=uuid.uuid4, editable=False, verbose_name='Ürün Kodu', max_length=1000)
     title = models.CharField(max_length=250, verbose_name="Ürün Adı:", blank=False, unique=True)
     brand = models.CharField(max_length=100, verbose_name='Ürün Markası')
     text = RichTextUploadingField(verbose_name='Ürün Açıklaması', blank=False)
@@ -64,13 +64,16 @@ class Product(models.Model):
     label = models.CharField(max_length=100, verbose_name='Etiket', blank=True)
     is_available = models.CharField(max_length=2, choices=Status.choices, default=Status.IN_STOCK,
                                     verbose_name='Satış Durumu')
-    likes = models.ManyToManyField('auth.User', related_name='product_like', verbose_name="Beğendim", blank=True)
 
     image1 = models.ImageField(upload_to=product_images_upload_to, verbose_name="Foto1")
     image2 = models.ImageField(upload_to=product_images_upload_to, verbose_name="Foto2", blank=True,
                                help_text='İstege Bağlı')
     image3 = models.ImageField(upload_to=product_images_upload_to, verbose_name="Foto3", blank=True,
                                help_text='İstege Bağlı')
+    image4 = models.ImageField(upload_to=product_images_upload_to, verbose_name="Foto4", blank=True,
+                               help_text='İstege Bağlı')
+
+    likes = models.ManyToManyField('auth.User', verbose_name='Müşteri', related_name='product_liked', blank=True)
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='Oluşturulma Tarihi')
     updated = models.DateTimeField(auto_now=True, verbose_name='Güncellenme Tarihi')
@@ -94,10 +97,34 @@ class Product(models.Model):
         verbose_name_plural = 'Ürünler'
 
 
-class ProductOptionsModel(models.Model):
+class ProductOptionsNameModel(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Ürün')
+    name = models.CharField(verbose_name='Ürün Seçenek Adı', max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Ürün Seçeneği'
+        verbose_name_plural = 'Ürün Seçeneği'
+
+
+class ProductOptions(models.Model):
+    option_name = models.ForeignKey(ProductOptionsNameModel, on_delete=models.CASCADE, verbose_name='Seçenek Adı')
+    options = models.CharField(max_length=100, verbose_name='Seçenekler', help_text='Ör: Kırmızı Renk', unique=True)
+
+    def __str__(self):
+        return str(self.option_name)
+
+    class Meta:
+        verbose_name = 'Ürün Seçeneği'
+        verbose_name_plural = 'Ürün Seçenekleri'
+
+
+class ProductDetailsModel(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Ürün Başlığı")
-    options_name = models.CharField(max_length=100, verbose_name='Seçenek Adı')
-    options = models.CharField(max_length=100, verbose_name='Seçenekler')
+    options_name = models.CharField(max_length=100, verbose_name='Özellik', help_text='Ör: Agırlık')
+    options = models.CharField(max_length=100, verbose_name='Özellik Seçenekleri', help_text='30kg')
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='Oluşturulma Tarihi')
     updated = models.DateTimeField(auto_now=True, verbose_name='Güncellenme Tarihi')
@@ -106,8 +133,8 @@ class ProductOptionsModel(models.Model):
         return self.options_name
 
     class Meta:
-        verbose_name = 'Ürün Seçeneği'
-        verbose_name_plural = 'Ürün Seçenekleri'
+        verbose_name = 'Ürün Ayrıntısı'
+        verbose_name_plural = 'Ürün Ayrıntıları'
 
 
 class HeaderSlideModel(models.Model):
@@ -157,3 +184,22 @@ class GalleryModel(models.Model):
         db_table = 'galeri'
         verbose_name = 'Fotoğraf'
         verbose_name_plural = 'Fotoğraflar'
+
+
+class Comments(models.Model):
+    commentator = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name='Yazan:', related_name="post")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Ürün:', related_name="comment")
+    rating = models.PositiveIntegerField(verbose_name='Oy')
+    comment = models.TextField(verbose_name='Yorum Yap:')
+
+    publish = models.DateTimeField(default=timezone.now, verbose_name='Yayınlama Tarihi')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Oluşturulma Tarihi')
+    updated = models.DateTimeField(auto_now=True, verbose_name='Güncellenme Tarihi')
+
+    def __str__(self):
+        return str(self.commentator) + ', ' + self.product.title[:40]
+
+    class Meta:
+        db_table = 'comments'
+        verbose_name = 'Ürün Yorum'
+        verbose_name_plural = 'Ürün Yorumları'
