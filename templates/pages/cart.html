@@ -12,6 +12,7 @@
                         <div class="wrap-table-shopping-cart ">
                             {% if object_list %}
                                 <caption><b>Sepetim, {{ request.user }}</b></caption>
+                                <p> Sepet Numarası : {{ id.cart_id }}</p>
                                 <table class="table-shopping-cart">
                                     <tr class="table_head ">
                                         <th class="column-1">Ürün</th>
@@ -28,10 +29,11 @@
                                                     <img src="{{ cart.product.image1.url }}" alt="IMG">
                                                 </div>
                                             </td>
-                                            <td class="column-2"><a
-                                                    href="{% url 'store:product_detail' cart.product.category.title.lower|slugify cart.product.slug %}">
-                                                {{ cart.product.title }}
-                                            </a></td>
+                                            <td class="column-2">
+                                                <a href="{% url 'store:product_detail' cart.product.category.title.lower|slugify cart.product.slug %}">
+                                                    {{ cart.product.title }}
+                                                </a>
+                                            </td>
                                             <td class="column-3">$ {{ cart.product.price }}</td>
                                             <td class="column-4">
                                                 <div class="wrap-num-product flex-w m-l-auto m-r-0">
@@ -43,7 +45,9 @@
                                                            name="num-product1" value="{{ cart.quantity }}">
 
                                                     <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                                        <i class="fs-16 zmdi zmdi-plus"></i>
+                                                        <a href="{% url 'carts:add_cart' request.user cart.product.product_code %}">
+                                                            <i class="fs-16 zmdi zmdi-plus"></i>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -62,15 +66,16 @@
                                 <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                                     <div class="flex-w flex-m m-r-20 m-tb-5">
                                         <div class="flex-c-m stext-101 cl2 size-118 p-lr-15 trans-04 m-tb-5 ">
-                                            <td class="column-5">Toplam: $ {{ total|floatformat:2 }}</td>
+                                            Toplam: $ {{ total|floatformat:2 }}
                                         </div>
                                     </div>
                                 </div>
+
                             {% else %}
                                 <p class="txt-center">Sepetinizde ürün bulunmuyor</p>
                             {% endif %}
-                        </div>
 
+                        </div>
 
                         <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                             <div class="flex-w flex-m m-r-20 m-tb-5">

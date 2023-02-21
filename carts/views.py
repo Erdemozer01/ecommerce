@@ -38,6 +38,7 @@ class CartListView(generic.ListView):
             total = CartItems.objects.filter(cart__customer=self.request.user.pk).aggregate(Sum('total'))
             context['my_favorites'] = Product.objects.filter(likes=self.request.user)
             context['total'] = total.get('total__sum')
+            context['id'] = Cart.objects.get(customer=self.request.user)
         return context
 
 
