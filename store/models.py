@@ -209,7 +209,6 @@ class PromoCodeModel(models.Model):
         return str(self.promo_code)
 
     class Meta:
-        db_table = 'promo_code'
         ordering = ['-created']
         verbose_name = "Promosyon Kodu"
         verbose_name_plural = "Promosyon Kodları"
