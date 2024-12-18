@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from pygments.lexer import default
 
 from .models import Profile
 from store.city import country_list, turkey_cities
@@ -64,7 +63,7 @@ class CheckOutForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['first_name', 'last_name', 'email', 'address_type', 'country', 'city', 'location', 'address',
-                  'zip_code', 'phone', 'birth_day',]
+                  'zip_code', 'phone', 'birth_day', ]
 
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Adı'}),
@@ -78,4 +77,3 @@ class CheckOutForm(forms.ModelForm):
             'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
             'birth_day': forms.DateInput(attrs={'type': 'date', }, format='%Y-%m-%d'),
         }
-
