@@ -1,0 +1,525 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load hitcount_tags %}
+
+{% block title %} {{ product.title }} {% endblock %}
+
+{% block stylesheets %}
+    
+{% endblock %}
+
+
+{% block content %}
+    <!-- ======= Hero Section ======= -->
+    
+    <main class="container">
+
+        <section class="section section bg-soft pb-4 overflow-hidden z-2" style="margin-top: -3%">
+
+            <div class="container z-2">
+
+                <div class="row justify-content-center text-center pt-6">
+                    <div class="col-lg-8 col-xl-8">
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                    <div class="alert alert-danger alert-dismissible shadow-soft fade show mt-5"
+                                         role="alert">
+                                {% else %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible shadow-soft fade show"
+                                         role="alert">
+                                {% endif %}
+
+                            <span class="alert-inner--icon">
+                                    {% if message.tags == 'error' %}
+                                        <span class="far fa-thumbs-down"></span>
+                                    {% elif message.tags == 'success' %}
+                                        <span class="far fa-thumbs-up"></span>
+                                    {% else %}
+
+                                    {% endif %}
+                                </span>
+
+                            <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
+
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="row g-4">
+            <div class="col-md-8">
+
+                <h3 class="pb-4 mb-4 fst-italic">
+
+                </h3>
+
+                <article class="blog-post">
+
+                    <div id="blueimp-gallery-carousel"
+                         class="blueimp-gallery blueimp-gallery-controls blueimp-gallery-carousel rounded border-light shadow-soft"
+                         aria-label="image carousel">
+
+                        <div class="slides" aria-live="off"></div>
+                        <h3 class="title"></h3>
+                        <a class="prev" aria-controls="blueimp-gallery-carousel" aria-label="previous slide"></a>
+                        <a class="next" aria-controls="blueimp-gallery-carousel" aria-label="next slide"></a>
+                        <a class="play-pause" aria-controls="blueimp-gallery-carousel"
+                           aria-label="play slideshow"
+                           aria-pressed="true"
+                           role="button"></a>
+
+                        <ol class="indicator"></ol>
+
+                    </div>
+
+                    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+                        <div class="slides"></div>
+                        <h3 class="title"></h3>
+                        <a class="prev"></a>
+                        <a class="next"></a>
+                        <a class="close"></a>
+                        <a class="play-pause"></a>
+                        <ol class="indicator"></ol>
+                    </div>
+
+                    <div id="links">
+
+                        {% if product.image.url and product.images.count == 0 %}
+
+                            <a href="{{ product.image.url }}" class="ml-2 text-decoration-none">
+                                <img src="{{ product.image.url }}" width="50" height="50"
+                                     alt="{{ product.image.name }}"/>
+                            </a>
+
+                        {% else %}
+
+                            {% for foo in product.images.all %}
+
+                                {% if foo.image %}
+                                    <a href="{{ foo.image.url }}" class="ml-2 text-decoration-none"
+                                       data-gallery="identifier">
+                                        <img src="{{ foo.image.url }}" width="50" height="50"
+                                             alt="{{ foo.image.name }}"/>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <div class="col-12 container-fluid">
+
+                        <div class="float-left" style="margin-top: -10px">
+                            <a href="{% url 'store:product_likes' product.pk %}"
+                               class="btn-inner-icon mt-3 text-decoration-none">
+                                            <span class="mr-1">
+                                                <span class="fas fa-thumbs-up text-success fa-2x animate-up-2"
+                                                      data-toggle="tooltip"
+                                                      title="Ürünü Beğendim"></span>
+                                                <span class="badge badge-success" data-toggle="tooltip"
+                                                      title="Bu ürünü {{ product.likes.count }} kişi beğendi">{{ product.likes.count }}
+                                                </span>
+                                            </span>
+                            </a>
+                            <a href="{% url 'store:product_dislikes' product.pk %}"
+                               class="btn-icon mt-3 ml-3 text-decoration-none">
+                                            <span class="mr-1">
+                                                <span class="fas fa-thumbs-down text-danger fa-2x animate-down-2"
+                                                      data-toggle="tooltip"
+                                                      title="Ürünü Beğenmedim"></span>
+                                                <span class="badge badge-danger" data-toggle="tooltip"
+                                                      title="Bu ürünü {{ product.dislikes.count }} kişi beğenmedi">{{ product.dislikes.count }}</span>
+                                            </span>
+                            </a>
+                        </div>
+                        <div class="float-right">
+                            <a href="{% url 'store:add_cart' product.pk request.session.session_key %}" class="btn btn-icon-only btn-primary btn-pill mr-3" type="submit"
+                                    title="Sepete ekle" data-toggle="tooltip">
+                                <span class="fas fa-cart-plus text-small mx-auto "></span>
+                            </a>
+
+                            {% if request.user in product.wish_list.all %}
+                                <a class="btn btn-icon-only btn-primary btn-pill text-danger" data-toggle="tooltip"
+                                   href="{% url 'store:wish_list' product.pk %}" title="İstek listesinden çıkar">
+                                
+                                    <span aria-hidden="true" class="far fa-heart"
+                                          title="Bu ürünü kişi {{ product.wish_list.count }} istek listesine ekledi">
+                                    </span>
+                                </a>
+
+                            {% else %}
+                                <a class="btn btn-icon-only btn-primary btn-pill text-danger" data-toggle="tooltip"
+                                   href="{% url 'store:wish_list' product.pk %}" title="İstek listesine ekle">
+                                    <span aria-hidden="true" class="fa-solid fa-heart-circle-plus"
+                                          title="Bu ürünü kişi {{ product.wish_list.count }} istek listesine ekledi">
+                                    </span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-6">
+                        <!-- Tab Nav -->
+                        <div class="nav-wrapper position-relative">
+                            <ul class="nav nav-pills flex-column flex-sm-row" id="tabs-text" role="tablist">
+                                <li class="nav-item mr-sm-3 mr-md-0">
+                                    <a class="nav-link mb-sm-3 mb-md-0 active text-decoration-none"
+                                       id="tabs-text-1-tab"
+                                       data-toggle="tab" href="#tabs-text-1" role="tab" aria-controls="tabs-text-1"
+                                       aria-selected="true">Ürün Açıklaması</a>
+                                </li>
+                                <li class="nav-item mr-sm-3 mr-md-0">
+                                    <a class="nav-link mb-sm-3 mb-md-0 text-decoration-none" id="tabs-text-2-tab"
+                                       data-toggle="tab"
+                                       href="#tabs-text-2" role="tab" aria-controls="tabs-text-2"
+                                       aria-selected="false"> <span class="badge badge-info" data-toggle="tooltip"
+                                                                    title="Ürüne {{ comments.count }} kişi yorum yaptı">{{ comments.count }}</span>
+                                        Yorumlar </a>
+                                </li>
+                                <li class="nav-item mr-sm-3 mr-md-0">
+                                    <a class="nav-link mb-sm-3 mb-md-0 text-decoration-none" id="tabs-text-3-tab"
+                                       data-toggle="tab"
+                                       href="#tabs-text-3" role="tab" aria-controls="tabs-text-3"
+                                       aria-selected="false">Ödeme</a>
+                                </li>
+                                <li class="nav-item mr-sm-3 mr-md-0">
+                                    <a class="nav-link mb-sm-3 mb-md-0 text-decoration-none" id="tabs-text-4-tab"
+                                       data-toggle="tab"
+                                       href="#tabs-text-4" role="tab" aria-controls="tabs-text-4"
+                                       aria-selected="false">İptal/iade</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- End of Tab Nav -->
+                        <!-- Tab Content -->
+                        <div class="rounded" style="margin-top: -20px">
+                            <div class="p-0">
+                                <div class="tab-content" id="tabcontent1">
+                                    <div class="tab-pane fade show active" id="tabs-text-1" role="tabpanel"
+                                         aria-labelledby="tabs-text-1-tab">
+                                        <p class="mx-auto align-items-center">{{ product.text|safe }}</p>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="tabs-text-2" role="tabpanel"
+                                         aria-labelledby="tabs-text-2-tab">
+                                        <!-- Yorum Kartları -->
+
+                                        {% if request.user.is_anonymous %}
+
+                                            <p class="mt-3 text-xl-center">Yorum yapabilmeniz için giriş yapmak
+                                                zorundasınız.
+                                                Giriş yapmak için
+                                                <a href="{% url 'login' %}">Tıklayınız </a>
+                                            </p>
+
+                                            {% if comments %}
+
+                                                {% for comment in comments %}
+
+                                                    <div class="col-11 shadow-soft border-light mb-3 mx-auto">
+                                                        <div class="card-body">
+                                                            <div class="row ">
+                                                                <div class="col-md-12">
+                                                                    <p class="mb-2 text-italic font-weight-bold"><span
+                                                                            class="font-weight-bold">{{ comment.user }}</span>
+                                                                        isimli kullanıcının {{ comment.created|date }}
+                                                                        tarihli yorumu</p>
+
+                                                                    <p class="mb-0" style="text-align: justify">
+                                                                        {{ comment.comment }}
+                                                                    </p>
+
+                                                                    <a href="{% url "store:report_comment" comment.pk %}"
+                                                                       class="btn-icon mt-3 mr-1 text-decoration-none float-left">
+                                                                        <span class="mr-1 small">
+                                                                            <span class="fa fa-flag text-danger"
+                                                                                  title="Kötüye Kullanım"
+                                                                                  data-toggle="tooltip"></span>
+                                                                            Yorumu Rapor et
+                                                                        </span>
+                                                                    </a>
+
+                                                                    {% if request.user.username == comment.user.username %}
+                                                                        <a href="{% url "store:comment_delete" comment.pk %}"
+                                                                           class="btn-icon mt-3 mr-1 text-decoration-none float-right">
+                                                                        <span class="mr-1">
+                                                                            <span class="fa fa-trash text-danger"
+                                                                                  title="Yorumu sil"
+                                                                                  data-toggle="tooltip"></span>
+                                                                        </span>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                {% endfor %}
+
+                                            {% else %}
+                                                <p class="mt-3 text-xl-center">İlk yorumu yapan siz olun.</p>
+                                            {% endif %}
+
+                                        {% elif request.user.is_authenticated %}
+
+                                            <div class="row mt-3">
+                                                <div class="col-12 mx-auto">
+
+                                                    <!-- Yorum Yazma -->
+                                                    <div class="form-group mx-auto">
+                                                        <label for="exampleFormControlTextarea2"
+                                                               class="h5">Yorum</label>
+
+                                                        <form method="post">
+                                                            {% csrf_token %}
+                                                            <textarea class="form-control"
+                                                                      id="exampleFormControlTextarea2"
+                                                                      placeholder="Ürün hakkında yorumunuzu yazın"
+                                                                      rows="6" type="text" name="comment"
+                                                                      value="{{ request.POST.comment }}"></textarea>
+                                                            <button class="btn btn-primary text-dark mb-4 float-right mt-2"
+                                                                    type="submit">Gönder
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            {% if comments %}
+
+                                                {% for comment in comments %}
+
+                                                    <div class="col-12 shadow-soft border-light mb-3 mx-auto">
+                                                        <div class="card-body">
+                                                            <div class="row ">
+                                                                <div class="col-md-12">
+                                                                    <p class="mb-2 font-weight-bold">
+                                                                        
+                                                                        <span class="font-weight-bold text-italic">@{{ comment.user }}</span>
+                                                                        <small class="float-right">{{ comment.created }}</small>
+
+                                                                    <p class="mb-0" style="text-align: justify">
+                                                                        {{ comment.comment }}
+                                                                    </p>
+
+                                                                    <a href="{% url "store:report_comment" comment.pk %}"
+                                                                       class="btn-icon mt-3 mr-1 text-decoration-none float-left">
+                                                                        <span class="mr-1 small">
+                                                                            <span class="fa fa-flag text-danger"
+                                                                                  title="Kötüye Kullanım"
+                                                                                  data-toggle="tooltip"></span>
+                                                                            Yorumu Rapor et
+                                                                        </span>
+                                                                    </a>
+
+                                                                    {% if request.user.username == comment.user.username %}
+                                                                        <a href="{% url "store:comment_delete" comment.pk %}"
+                                                                           class="btn-icon mt-3 mr-1 text-decoration-none float-right">
+                                                                        <span class="mr-1">
+                                                                            <span class="fa fa-trash text-danger"
+                                                                                  title="Yorumu sil"
+                                                                                  data-toggle="tooltip"></span>
+                                                                        </span>
+                                                                        </a>
+                                                                    {% endif %}
+                                                                
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                {% endfor %}
+
+                                            {% else %}
+                                                <p class="mt-3 text-xl-center">İlk yorumu yapan siz olun.</p>
+                                            {% endif %}
+                                        {% endif %}
+
+                                    </div>
+
+                                    <div class="tab-pane fade" id="tabs-text-3" role="tabpanel"
+                                         aria-labelledby="tabs-text-3-tab">
+                                        <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch
+                                            freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit
+                                            kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
+                                            Marfa eiusmod Pinterest in do umami readymade swag.</p>
+                                        <p>Day handsome addition horrible sensible goodness two contempt. Evening
+                                            for married his account removal. Estimable me disposing of be moonlight
+                                            cordially curiosity.</p>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="tabs-text-4" role="tabpanel"
+                                         aria-labelledby="tabs-text-4-tab">
+                                        <p>Exercitation photo booth stumptown tote bag Banksy, elit small batch
+                                            freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit
+                                            kale chips proident chillwave deep v laborum. Aliquip veniam delectus,
+                                            Marfa eiusmod Pinterest in do umami readymade swag.</p>
+                                        <p>Day handsome addition horrible sensible goodness two contempt. Evening
+                                            for married his account removal. Estimable me disposing of be moonlight
+                                            cordially curiosity.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Tab Content -->
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="position-sticky mt-3" style="top: 2rem;">
+                    <div class="p-4 mb-3 bg-body-tertiary rounded">
+                        <h5 class="fst-italic">{{ product.title }}</h5>
+
+                        <p class="mb-0">
+                            <i class="fa fa-award fa-sm"></i>
+                            <span class="text text-small">Marka : </span>
+                            <a href="{% url 'store:brand_category' product.brand|slugify %}">
+                                <i class="badge badge-info" title="{{ product.brand|title }} markalı ürün"
+                                   data-toggle="tooltip">{{ product.brand|title }}</i>
+                            </a>
+
+                        </p>
+
+                        <p class="mb-0">
+                            <i class="fa fa-shapes fa-sm"></i>
+                            <span class="text text-small">Kategori : </span>
+                            <a href="{% url 'store:product_category' product.category.title %}"
+                               class="badge badge-info" title="{{ product.category.title|title }} Kategorisi"
+                               data-toggle="tooltip">{{ product.category|title }}
+                            </a>
+                        </p>
+
+                        <p class="mb-0">
+                            <i class="fa fa-eye fa-sm"></i>
+                            <span class="text text-small">İnceleme : </span>
+                            <a class="badge badge-info" title="Bu ürün {% get_hit_count for product %} kez incelendi"
+                               data-toggle="tooltip">{% get_hit_count for product %}
+                            </a>
+                        </p>
+
+                        {% if product.stock >= 10 %}
+                            <p class="mb-0">Stok Durumu: Stokta var</p>
+                        {% elif product.stock <= 5 and product.stock > 0 %}
+                            <p class="mb-0">Stok Durumu: <span class="text-danger">Sadece {{ product.stock }} adet kaldı ! </span>
+                            </p>
+                        {% elif product.stock == 0 %}
+                            <p class="mb-0">Stok Durumu: <span class="text-danger">Stokta yok ! </span></p>
+                        {% endif %}
+
+                        {% if product.discount_price %}
+                            <h4>
+                                Fiyat:
+                                <span class="h6 mb-0 text-gray text-through mr-2">
+                                                    {{ product.price }} TL
+                                                </span>
+                                <span class="h5 mb-0 text-danger">{{ product.discount_price }} TL </span>
+                            </h4>
+                        {% else %}
+                            <span class="h5 mb-0 text-gray font-weight-bold">Fiyat :  </span>
+                            <span>{{ product.price }} TL</span>
+                        {% endif %}
+
+                        <a href="{% url 'store:add_cart' product.pk request.session.session_key %}" class="col-12 btn btn-primary mt-3" type="submit" title="Sepete ekle">
+                            <span class="fas fa-cart-plus text-small mx-auto ">  </span>
+                            Sepete Ekle
+                        </a>
+
+                    </div>
+
+                    <div>
+                        <h4 class="fst-italic">İlişkili ürünler</h4>
+                        <ul class="list-unstyled">
+                            {% for related_product in related_products %}
+                                <li>
+                                    <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                                       href="{% url 'store:product_detail' related_product.pk related_product.brand|slugify related_product.slug %}">
+
+                                        <div class="col-lg-8">
+                                            <h6 class="mb-0">{{ product.title }}</h6>
+                                            <small class="text-body-secondary">{{ related_product.category }}</small>
+                                        </div>
+                                    </a>
+                                </li>
+                            {% endfor %}
+
+                            <li>
+                                <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                                   href="#">
+                                    <svg class="bd-placeholder-img" width="100%" height="96"
+                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                         preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <rect width="100%" height="100%" fill="#777"/>
+                                    </svg>
+                                    <div class="col-lg-8">
+                                        <h6 class="mb-0">This is another blog post title</h6>
+                                        <small class="text-body-secondary">January 14, 2024</small>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                                   href="#">
+                                    <svg class="bd-placeholder-img" width="100%" height="96"
+                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                         preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <rect width="100%" height="100%" fill="#777"/>
+                                    </svg>
+                                    <div class="col-lg-8">
+                                        <h6 class="mb-0">Longer blog post title: This one has multiple lines!</h6>
+                                        <small class="text-body-secondary">January 13, 2024</small>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic">Archives</h4>
+                        <ol class="list-unstyled mb-0">
+                            <li><a href="#">March 2021</a></li>
+                            <li><a href="#">February 2021</a></li>
+                            <li><a href="#">January 2021</a></li>
+                            <li><a href="#">December 2020</a></li>
+                            <li><a href="#">November 2020</a></li>
+                            <li><a href="#">October 2020</a></li>
+                            <li><a href="#">September 2020</a></li>
+                            <li><a href="#">August 2020</a></li>
+                            <li><a href="#">July 2020</a></li>
+                            <li><a href="#">June 2020</a></li>
+                            <li><a href="#">May 2020</a></li>
+                            <li><a href="#">April 2020</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic">Elsewhere</h4>
+                        <ol class="list-unstyled">
+                            <li><a href="#">GitHub</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">Facebook</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- End of Main Content -->
+{% endblock %}
+
+

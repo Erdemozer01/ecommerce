@@ -1,0 +1,195 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load hitcount_tags %}
+
+{% load django_bootstrap5 %}
+
+
+
+{% block title %} {{ request.user|title }} {% endblock %}
+
+{% block content %}
+    <div class="container" style="margin-top: 10%">
+        <div class="py-5 text-center">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger alert-dismissible shadow-soft fade show"
+                             role="alert">
+                    {% else %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible shadow-soft fade show"
+                             role="alert">
+                    {% endif %}
+
+                <span class="alert-inner--icon">
+                                        {% if message.tags == 'error' %}
+                                            <span class="far fa-thumbs-down"></span>
+                                        {% elif message.tags == 'success' %}
+                                            <span class="far fa-thumbs-up"></span>
+                                        {% else %}
+
+                                        {% endif %}
+                                    </span>
+
+                <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="row mb-4">
+                <div class="col-xl-4 col-md-4">
+                    <div class="card card-body shadow-soft border-light rounded-3 overflow-hidden mb-4 mb-xl-0">
+                        <!-- Tab Nav -->
+                        <ul class="nav nav-pills nav-fill flex-column vertical-tab rounded" id="tab12" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab-3" data-toggle="tab" href="#tab-13" role="tab"
+                                   aria-controls="tab-13" aria-selected="true">
+                                    <i class="fa fa-dashboard text-info"></i>
+                                    Genel
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="home-tab-3" data-toggle="tab" href="#tab-14" role="tab"
+                                   aria-controls="tab-14" aria-selected="true">
+                                    <i class="fa fa-user-tie text-info"></i>
+                                    Kullanıcı
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-15" role="tab"
+                                   aria-controls="tab-15" aria-selected="false">
+                                    <i class="fa fa-address-card text-info"></i>
+                                    İletişim
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="contact-tab-3" data-toggle="tab" href="#tab-16" role="tab"
+                                   aria-controls="tab-16" aria-selected="false">
+                                    <i class="fa fa-shopping-cart text-secondary"></i>
+                                    Şiparişlerim
+                                </a>
+                            </li>
+
+                        </ul>
+                        <!-- End of Tab Nav -->
+                    </div>
+
+                </div>
+
+                <div class="col-xl-8 col-md-8">
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="tabcontent">
+                        <!-- Tab 1 -->
+                        <div class="tab-pane fade show active" id="tab-13" role="tabpanel"
+                             aria-labelledby="tab-13">
+
+                            <div class="card card-body shadow-soft border-light rounded-3 overflow-hidden mb-4 mb-xl-0">
+
+                                <div class="card-header font-weight-bold text-info " style="margin-bottom: -4%">
+                                    Profil Kartım
+                                </div>
+
+                                <div class="card-body">
+
+                                    <p class="card-text">Kullanıcı Adı: {{ request.user.username }}</p>
+
+                                    <p class="card-text">Ad Soyad
+                                        : {{ request.user.first_name }} {{ request.user.last_name }}</p>
+
+                                    <p class="card-text">Email : {{ request.user.email }}</p>
+
+                                    <p class="card-text">Adres :
+                                        {{ request.user.profile.address }} {{ request.user.profile.location }}
+                                        / {{ request.user.profile.city|upper }} {{ request.user.profile.zip_code }}
+                                        {% if request.user.profile.country|title == "Tr" %}
+                                            TÜRKİYE
+                                        {% endif %}
+                                    </p>
+
+                                    <p class="card-text">Telefon: {{ request.user.profile.phone }} </p>
+
+                                    <p class="card-text">Yaş: {{ request.user.profile.birth_day|timesince }} </p>
+
+                                    <p class="card-text">Son Oturum Açma : {{ request.user.last_login }}</p>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <!-- Tab 1 -->
+                        <div class="tab-pane fade" id="tab-14" role="tabpanel"
+                             aria-labelledby="tab-14">
+
+                            <form method="post" class="form-sm">
+                                {% csrf_token %}
+                                {% bootstrap_form user_form %}
+
+                                <button class="w-100 btn btn-primary btn-lg" type="submit">
+                                    Güncelle
+                                </button>
+                            </form>
+
+                            <div class="mt-2">
+                                <a href="{% url "accounts:user_delete" request.user.pk %}">
+                                    <button class="w-100 btn btn-danger btn-lg" type="button">Hesabı Sil
+                                    </button>
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <!-- Tab 2 -->
+                        <div class="tab-pane fade" id="tab-15" role="tabpanel" aria-labelledby="tab-15">
+                            <form method="post">
+                                {% csrf_token %}
+                                {% bootstrap_form profile_form %}
+                                <button class="w-100 btn btn-primary btn-lg" type="submit">Güncelle</button>
+                            </form>
+                        </div>
+
+                        <!-- Tab 3 -->
+                        <div class="tab-pane fade" id="tab-16" role="tabpanel" aria-labelledby="tab-16">
+
+                            <table class="table table-responsive shadow-soft rounded">
+
+                                <tr>
+                                    <th class="border-0" scope="col" id="Ürün Kodu">Ürün Kodu</th>
+                                    <th class="border-0" scope="col" id="Ürün">Ürün</th>
+                                    <th class="border-0" scope="col" id="Adet">Adet</th>
+                                    <th class="border-0" scope="col" id="Adres">Adres</th>
+                                    <th class="border-0" scope="col" id="Fiyat">Fiyat</th>
+                                    <th class="border-0" scope="col" id="Tarih">Tarih</th>
+                                    <th class="border-0" scope="col" id="İşlem">İşlem</th>
+                                </tr>
+
+                                <tr>
+                                    <td>Ürün Kodu</td>
+                                    <td>Ürün</td>
+                                    <td>Adet</td>
+                                    <td>Adres</td>
+                                    <td>Fiyat</td>
+                                    <td>Tarih</td>
+                                    <td>
+                                        <a href="">iade et</a>
+                                    </td>
+
+                                </tr>
+
+                            </table>
+                        </div>
+
+                    </div>
+                    <!-- End of Tab Content -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

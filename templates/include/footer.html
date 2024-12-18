@@ -1,0 +1,107 @@
+{% load static %}
+{% load general_settings %}
+{% neuromorphism_general_settings as neuromorphism_general_settings %}
+<footer class="d-flex pb-5 pt-6 pt-md-7 border-top border-light bg-primary">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <p><strong>{% if neuromorphism_general_settings.name %}
+                    {{ neuromorphism_general_settings.name|title }}{% else %}
+                    Neuromorphism{% endif %}</strong> {{ neuromorphism_general_settings.explain }}</p>
+                <ul class="d-flex list-unstyled mb-5 mb-lg-0">
+                    <li class="mr-2">
+                        <a href="https://twitter.com/themesberg" target="_blank"
+                           class="btn btn-icon-only btn-pill btn-primary" aria-label="twitter social link"
+                           data-toggle="tooltip" data-placement="top" title="Follow @themesberg on Twitter">
+                            <span aria-hidden="true" class="fab fa-twitter"></span>
+                        </a>
+                    </li>
+                    <li class="mr-2">
+                        <a href="https://www.facebook.com/themesberg/" target="_blank"
+                           class="btn btn-icon-only btn-pill btn-primary" aria-label="facebook social link"
+                           data-toggle="tooltip" data-placement="top" title="Like @themesberg on Facebook">
+                            <span aria-hidden="true" class="fab fa-facebook"></span>
+                        </a>
+                    </li>
+                    <li class="mr-2">
+                        <a href="https://github.com/themesberg" target="_blank"
+                           class="btn btn-icon-only btn-pill btn-primary" aria-label="github social link"
+                           data-toggle="tooltip" data-placement="top" title="Open source projects">
+                            <span aria-hidden="true" class="fab fa-github"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://dribbble.com/themesberg" target="_blank"
+                           class="btn btn-icon-only btn-pill btn-primary" aria-label="dribbble social link"
+                           data-toggle="tooltip" data-placement="top" title="Follow us on Dribbble">
+                            <span aria-hidden="true" class="fab fa-dribbble"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-6 col-lg-2 mb-5 mb-lg-0">
+                <h5>{% if neuromorphism_general_settings.name %}
+                    {{ neuromorphism_general_settings.name|title }}{% else %}Themesberg{% endif %}</h5>
+                <ul class="footer-links list-unstyled mt-2">
+                    <li class="mb-1"><a class="p-2" target="_blank" href="{% url 'store:store_home' %}">Mağaza</a></li>
+                    <li class="mb-1"><a class="p-2" target="_blank" href="{% url 'article:article_home' %}">Makale</a>
+                    </li>
+                    <li class="mb-1"><a class="p-2" target="_blank" href="#">Hakkımızda</a></li>
+                    <li><a class="p-2" target="_blank" href="{% url 'store:contact' %}">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-lg-2 mb-5 mb-lg-0">
+                <h5>Diğer</h5>
+                <ul class="footer-links list-unstyled mt-2">
+
+                    <li class="mb-1">
+                        <a class="p-2" href="https://themesberg.com/docs/pixel-bootstrap/getting-started/changelog"
+                           target="_blank">Sıkça sorulan sorular</a>
+                    </li>
+                    <li class="mb-1">
+                        <a class="p-2" target="_blank" href="https://themesberg.com/licensing">Lisans</a>
+                    </li>
+                    <li>
+                        <a class="p-2" target="_blank"
+                           href="https://github.com/themesberg/pixel-bootstrap-ui-kit/issues">Gizlilik ilkemiz</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4 mb-5 mb-lg-0">
+                <h5>Abonelik</h5>
+                <p class="text-gray font-small mt-2">Bültenimize abone olun ve ürünlerimiz ve hizmetlerimizle ilgili en
+                    son haberleri alın!</p>
+                <form action="{% url 'store:abone_ol' %}" method="get">
+
+                    <div class="form-row mb-2">
+                        <div class="col-12">
+                            <label class="h6 font-weight-normal d-none" for="exampleInputEmail3">Email</label>
+                            <input type="email" value="{{ request.GET.email }}" class="form-control mb-2"
+                                   placeholder="example@company.com" name="email" aria-label="Subscribe form"
+                                   id="exampleInputEmail3" required>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block" data-loading-text="Sending">
+                                <span>Abone ol</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <p class="text-gray font-small m-0">Bilgilerinizi Paylaşmayacağız <a class="text-black" href="#">Gizlilik</a>
+                </p>
+            </div>
+        </div>
+        <hr class="my-5">
+        <div class="row">
+            <div class="col">
+
+                <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+                    <p class="font-weight-normal font-small mb-0">Copyright ©
+                        <span class="current-year"><script>document.write(new Date().getFullYear())</script></span>. Tüm
+                        Hakları saklıdır.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

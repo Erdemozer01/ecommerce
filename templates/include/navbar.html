@@ -1,0 +1,395 @@
+{% load static %}
+{% load categories %}
+{% load article_category %}
+{% product_categories_list_for_sidebar_menu_first_level as product_categories_first %}
+{% product_categories_list_for_sidebar_menu_second_level as product_categories_second %}
+{% product_categories_list_for_sidebar_menu_last_level as product_categories_last %}
+{% article_category_list as art_cat_list %}
+{% article_category_first as article_category_first %}
+{% article_category_second as article_category_second %}
+{% article_category_last as article_category_last %}
+
+<!-- Navbar -->
+
+<nav id="navbar-main" aria-label="Primary navigation"
+     class="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom navbar-light">
+
+    <div class="container position-relative">
+
+        {% if "makale" in request.path %}
+            <a class="navbar-brand shadow-soft py-2 px-3 rounded border border-light mr-lg-4"
+               href="{% url 'article:article_home' %}">
+                Makale
+            </a>
+        {% else %}
+            <a class="navbar-brand shadow-soft py-2 px-3 rounded border border-light mr-lg-4"
+               href="{% url 'store:store_home' %}">
+                Mağaza
+            </a>
+        {% endif %}
+
+        <div class="navbar-collapse collapse" id="navbar_global">
+
+            <div class="navbar-collapse-header">
+                <div class="row">
+                    {% if "makale" in request.path %}
+                        <div class="col-6 collapse-brand">
+                            <a href="{% url 'article:article_home' %}"
+                               class="navbar-brand shadow-soft py-2 px-3 rounded border border-light">
+                                Makale
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="col-6 collapse-brand">
+                            <a href="{% url 'store:store_home' %}"
+                               class="navbar-brand shadow-soft py-2 px-3 rounded border border-light">
+                                Mağaza
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="col-6 collapse-close">
+                        <a href="#navbar_global" class="fas fa-times" data-toggle="collapse"
+                           data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+                           title="close" aria-label="Toggle navigation"></a>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+
+                <li class="nav-item dropdown">
+                    {% if "makale" in request.path %}
+                        <a href="{% url 'store:store_home' %}" class="nav-link">
+                            <span class="nav-link-inner-text">Mağaza</span>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'article:article_home' %}" class="nav-link">
+                            <span class="nav-link-inner-text">Makale</span>
+                        </a>
+                    {% endif %}
+                </li>
+
+                {% if "makale" in request.path %}
+
+                    <li class="nav-item dropdown mega-dropdown">
+                        <a href="#" class="nav-link" data-toggle="dropdown">
+                            <span class="nav-link-inner-text">Makale Kategorisi</span>
+                            <span class="fas fa-angle-down nav-link-arrow ml-2"></span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="row">
+                                <div class="col-lg-6 inside-bg d-none d-lg-block">
+                                    <div class="justify-content-center bg-primary text-white">
+                                        <div class="px-6 pb-5 pt-3">
+                                            <dotlottie-player
+                                                    src="https://lottie.host/aac4a1d5-b496-4619-8e64-f741eb2cd6c7/VeyZ0UD0LD.lottie"
+                                                    background="transparent" speed="1"
+                                                    style="width: 300px; height: 300px" loop
+                                                    autoplay></dotlottie-player>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col pl-0">
+                                    <ul class="list-style-none">
+                                        {% if article_category_first %}
+                                            {% for art_cat in article_category_first %}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       href="{% url "article:article_category" art_cat.title %}">
+                                                        {{ art_cat.title|title }}
+                                                        <span class="badge badge-info small float-right">
+                                                        {{ art_cat.title|category_count }}
+                                                    </span>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                <div class="col pl-0">
+                                    <ul class="list-style-none">
+                                        {% if article_category_second %}
+                                            {% for art_cat in article_category_second %}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       href="{% url "article:article_category" art_cat.title %}">
+                                                        {{ art_cat.title|title }}
+                                                        <span class="badge badge-info small float-right">
+                                                        {{ art_cat.title|category_count }}
+                                                    </span>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                {% if article_category_last %}
+                                    {% for art_cat in article_category_last %}
+                                        <li>
+                                            <a class="dropdown-item"
+                                               href="{% url "article:article_category" art_cat.title %}">
+                                                {{ art_cat.title|title }}
+                                                <span class="badge badge-info small float-right">
+                                                        {{ art_cat.title|category_count }}
+                                                    </span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+
+                {% else %}
+                    <li class="nav-item dropdown mega-dropdown">
+                        <a href="#" class="nav-link" data-toggle="dropdown">
+                            <span class="nav-link-inner-text">Ürün Kategorisi</span>
+                            <span class="fas fa-angle-down nav-link-arrow ml-2"></span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="row">
+                                <div class="col-lg-6 inside-bg d-none d-lg-block">
+                                    <div class="justify-content-center bg-primary text-white">
+                                        <div class="px-6 pb-5 pt-3">
+                                            <dotlottie-player
+                                                    src="https://lottie.host/5ca25f32-c129-45be-b576-333d9fb96450/ZdbAXfWCME.lottie"
+                                                    background="transparent" speed="1"
+                                                    style="width: 300px; height: 300px" loop
+                                                    autoplay>
+                                            </dotlottie-player>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col pl-0">
+                                    <ul class="list-style-none">
+                                        {% if product_categories_first %}
+                                            {% for product_category in product_categories_first %}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       href="{% url "store:product_category" product_category.title %}">
+                                                        {{ product_category.title|title }}
+                                                        <span class="badge badge-info small float-right">
+                                                            {{ product_category.title|product_cat_count }}
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                {% if product_categories_second %}
+
+                                    <div class="col pl-0">
+                                        <ul class="list-style-none">
+                                            {% for foo in product_categories_second %}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       href="{% url "store:product_category" foo.title %}">
+                                                        {{ foo.title|title }}
+                                                        <span class="badge badge-info small float-right">
+                                                            {{ product_category.title|product_cat_count }}
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+
+                                {% endif %}
+                            
+                                {% if product_categories_last %}
+                                    <div class="col pl-0">
+                                        <ul class="list-style-none">
+                                            {% for product_category_last in product_categories_last %}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       href="{% url "store:product_category" product_category_last.title %}">
+                                                        {{ product_category_last.title|title }}
+                                                        <span class="badge badge-info small float-right">
+                                                            {{ product_category.title|product_cat_count }}
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+
+                                        </ul>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </li>
+                {% endif %}
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link" data-toggle="dropdown">
+                        <span class="nav-link-inner-text">Destek</span>
+                        <span class="fas fa-angle-down nav-link-arrow ml-2"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg">
+                        <div class="col-auto px-0" data-dropdown-content>
+                            <div class="list-group list-group-flush">
+                                <a href="https://themesberg.com/docs/neumorphism-ui/getting-started/quick-start/"
+                                   target="_blank"
+                                   class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
+                                    <span class="icon icon-sm icon-secondary"><span
+                                            class="fas fa-file-alt"></span></span>
+                                    <div class="ml-4">
+                                        <span class="text-dark d-block">Hakkımızda</span>
+                                    </div>
+                                </a>
+                                <a href="{% url 'store:contact' %}" target="_blank"
+                                   class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
+                                        <span class="icon icon-sm icon-secondary"><span
+                                                class="fas fa-paper-plane"></span></span>
+                                    <div class="ml-4">
+                                        <span class="text-dark d-block">İletişim</span>
+                                    </div>
+                                </a>
+                                <a href="https://github.com/themesberg/neumorphism-ui/issues" target="_blank"
+                                   class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
+                                        <span class="icon icon-sm icon-secondary"><span
+                                                class="fas fa-microphone-alt"></span></span>
+                                    <div class="ml-4">
+                                        <span class="text-dark d-block">Sıkça sorulan sorular</span>
+                                    </div>
+                                </a>
+                                <a href="https://github.com/themesberg/neumorphism-ui/issues" target="_blank"
+                                   class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
+                                        <span class="icon icon-sm icon-secondary"><span
+                                                class="fas fa-eye-dropper"></span></span>
+                                    <div class="ml-4">
+                                        <span class="text-dark d-block">Gizlilik ilkemiz</span>
+                                    </div>
+                                </a>
+                                <a href="https://github.com/themesberg/neumorphism-ui/issues" target="_blank"
+                                   class="list-group-item list-group-item-action d-flex align-items-center p-0 py-3 px-lg-4">
+                                        <span class="icon icon-sm icon-secondary"><span
+                                                class="fas fa-drivers-license"></span></span>
+                                    <div class="ml-4">
+                                        <span class="text-dark d-block">Lisans</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="d-flex align-items-lg-center">
+
+            <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2" style="margin-right: -3%">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link" data-toggle="dropdown">
+                        {% if request.user.is_authenticated %}
+                            <span class="fa fa-user text-info" title="Hoş Geldiniz, {{ request.user }}"
+                                  data-toggle="tooltip"></span>
+                        {% else %}
+                            <a href="{% url "login" %}" target="_blank">
+                                <i class="fas fa-sign-in " style="margin-bottom: 10px"></i>
+                                Giriş
+                            </a>
+                        {% endif %}
+                    </a>
+
+                    <ul class="dropdown-menu">
+
+                        {% if request.user.is_authenticated %}
+                            <li>
+                                <a class="dropdown-item animate-hover"
+                                   href="{% url 'accounts:profile_update' request.user %}">
+                                    <span class="fa fa-user mr-1 animate-up-1"></span>Kullanıcı Bilgileri</a>
+                            </li>
+                        {% endif %}
+
+                        {% if request.user.is_superuser %}
+                            <li>
+                                <a class="dropdown-item animate-hover" href="{% url "store:store_home" %}admin/">
+                                    <span class="fa fa-user-tie mr-1 animate-up-2"></span>Admin Paneli
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% include "include/logout.html" %}
+                    </ul>
+                </li>
+            </ul>
+
+            {% if request.user.is_authenticated %}
+                <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2" style="margin-right: -6%">
+                    <li class="nav-item">
+
+                        <a href="{% url 'store:my_cart_list' request.user.username request.session.session_key %}"
+                           class="nav-link">
+                            {% if cart_total_products is None %}
+                                <span class="fas fa-shopping-cart text-warning" title="Ürün sepetiniz boş"
+                                      data-toggle="tooltip"></span>
+                                <span class="badge badge-info">0</span>
+                            {% else %}
+                                <span class="fas fa-shopping-cart text-warning" title="Ürün sepeti"
+                                      data-toggle="tooltip"></span>
+                                <span class="badge badge-info">{{ cart_total_products }}</span>
+                            {% endif %}
+
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2">
+                    <li class="nav-item dropdown">
+
+                        <a href="#" class="nav-link" data-toggle="dropdown">
+                            <span class="fas fa-heart text-danger" title="İstek Listesi" data-toggle="tooltip"></span>
+                            <span class="badge badge-info">{{ wish_list_products.count }}</span>
+                        </a>
+
+                        {% if wish_list_products is None %}
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a class="dropdown-item" href="#">İstek listeniz boş.</a>
+                                </li>
+                            </ul>
+                        {% else %}
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                {% for wish in wish_list_products %}
+                                    <li>
+                                        {% if wish.discount_price %}
+                                            <a class="dropdown-item"
+                                               href="{% url "store:product_detail" wish.pk wish.brand|slugify wish.slug %}">
+                                                {{ wish.title|truncatechars:25 }}
+                                                <p class="font-weight-bold">Fiyat : {{ wish.discount_price }} TL </p>
+                                            </a>
+                                        {% else %}
+                                            <a class="dropdown-item"
+                                               href="{% url "store:product_detail" wish.pk wish.brand|slugify wish.slug %}">
+                                                {{ wish.title|truncatechars:25 }}
+                                                <p class="font-weight-bold">Fiyat : {{ wish.price }} TL </p>
+                                            </a>
+                                        {% endif %}
+
+                                    </li>
+                                {% endfor %}
+                                <li>
+                                    <a class="dropdown-item" href="#">Toplam : {{ total }}</a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </li>
+                </ul>
+            {% endif %}
+
+
+            <button class="navbar-toggler ml-2" type="button" data-toggle="collapse" data-target="#navbar_global"
+                    aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+    </div>
+
+</nav>
+
+<!-- Navbar -->

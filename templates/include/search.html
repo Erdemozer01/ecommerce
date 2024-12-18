@@ -1,0 +1,17 @@
+<form method="get">
+    <div class="input-group mb-2">
+        {% if "makale" in request.path %}
+            <input class="form-control" id="exampleInputIcon2"
+                   placeholder="Kategori veya Başlık" aria-label="Input group"
+                   type="text" name="search" value="{{ request.GET.search }}">
+        {% elif "magaza" or "/product-kategori" or '' in request.get_absolute_url %}
+            <input class="form-control" id="exampleInputIcon2"
+                   placeholder="Kategori, Başlık, Marka" aria-label="Input group"
+                   type="text" name="search" value="{{ request.GET.search }}">
+        {% endif %}
+
+        <div class="input-group-append"><span class="input-group-text">
+            <i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</form>

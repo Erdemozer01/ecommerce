@@ -1,0 +1,150 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load hitcount_tags %}
+
+
+{% block title %}
+    {% if '?search' in request.get_full_path %}
+        Arama sonuçları
+    {% elif 'marka' in request.get_full_path %}
+        {{ brand|title }} markalı ürünler
+    {% elif 'makale/etiketler/' in request.get_full_path %}
+        #{{ tags|title }} Makale
+    {% else %}
+        {{ category.title|title }} Kategorisi
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <main class="container">
+
+        <section class="section section bg-soft pb-0 overflow-hidden z-2">
+            <div class="container z-2">
+                <div class="row justify-content-center text-center pt-6">
+                    <div class="col-lg-12 col-xl-12">
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                    <div class="alert alert-danger alert-dismissible shadow-soft fade show"
+                                         role="alert">
+                                {% else %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible shadow-soft fade show"
+                                         role="alert">
+                                {% endif %}
+
+                            <span class="alert-inner--icon">
+                                        {% if message.tags == 'error' %}
+                                            <span class="far fa-thumbs-down"></span>
+                                        {% elif message.tags == 'success' %}
+                                            <span class="far fa-thumbs-up"></span>
+                                        {% else %}
+
+                                        {% endif %}
+                                    </span>
+
+                            <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
+
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% include "include/search.html" %}
+
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <div class="row g-5">
+
+            <div class="col-12 mt-3">
+
+                <h3 class="pb-4 mb-3 fst-italic border-bottom mt-2">
+                    {% if '?search' in request.get_full_path %}
+                        Arama sonuçları
+                    {% elif 'marka' in request.get_full_path %}
+                        {{ brand|title }} markalı ürünler
+                    {% elif 'makale/etiketler/' in request.get_full_path %}
+                        <p class="font-weight-bold text-italic" style="margin-bottom: -4%;">#{{ tags|title }}</p>
+                    {% else %}
+                        {{ category.title|title }} Kategorisi
+                    {% endif %}
+                </h3>
+
+                <div class="row">
+
+                    {% if "makale/etiketler/" in request.get_full_path %}
+                        {% if article_tags_list %}
+                            {% for post in article_tags_list %}
+                                <div class="col-12 col-md-4 mb-4">
+                                    <div class="card bg-primary border-light shadow-soft">
+                                        <div class="card-header p-3">
+                                            {% thumbnail post.cover "1920x1080" crop="center" as im %}
+                                            <img src="{{ im.url }}" class="card-img-top rounded">
+                                        {% endthumbnail %}
+
+                                        </div>
+                                        <div class="card-body pt-2">
+                                            <div class="media d-flex align-items-center justify-content-between">
+
+                                                <div class="d-flex align-items-center">
+                                                    <a href="{% url 'article:article_category' post.category.title|slugify %}">
+                                                    <span class="small" title="Kategori" data-toggle="tooltip">
+                                                    <span class="badge badge-danger">{{ post.category.title }}</span>
+                                                </span>
+                                                    </a>
+
+                                                </div>
+
+                                                <div class="d-flex align-items-center">
+                                                <span class="small" title="Yayınlanma tarihi" data-toggle="tooltip">
+                                                    <span class="far fa-calendar-alt mr-1"></span>
+                                                    {{ post.created.date }}
+                                                </span>
+                                                </div>
+                                            </div>
+
+                                            <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
+                                                {% if post.title|length < 24 %}
+
+                                                <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
+                                                    <h3 class="h5 card-title mt-4 mb-5" title="{{ post.title }}"
+                                                        data-toggle="tooltip">{{ post.title }}</h3>
+                                                </a>
+                                            {% elif post.title|length > 24 %}
+                                                <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
+                                                    <h3 class="h5 card-title mt-4" title="{{ post.title }}"
+                                                        data-toggle="tooltip">{{ post.title|truncatechars:50 }}</h3>
+                                                </a>
+                                            {% endif %}
+                                            </a>
+
+                                            <a href="{% url 'article:article_detail' post.pk post.category.title|slugify post.slug %}"
+                                               class="btn btn-primary btn-sm"> Ayrıntılar &raquo; </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="align-items-lg-center h4 text-danger mx-auto">Makale Bulunamadı</p>
+                        {% endif %}
+
+                    {% endif %}
+
+                </div>
+
+                {% include "include/paginator.html" %}
+
+            </div>
+
+        </div>
+
+    </main>
+
+{% endblock %}

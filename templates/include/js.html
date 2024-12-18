@@ -1,0 +1,53 @@
+{% load static %}
+<!-- Core -->
+<script src="{% static '/vendor/jquery/dist/jquery-3.7.1.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/popper.js/dist/umd/popper.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/bootstrap/dist/js/bootstrap.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/headroom.js/dist/headroom.min.js' %}?{% now 'U' %}"></script>
+
+<!-- Vendor JS -->
+<script src="{% static '/vendor/onscreen/dist/on-screen.umd.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/nouislider/distribute/nouislider.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/waypoints/lib/jquery.waypoints.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/jarallax/dist/jarallax.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/jquery.counterup/jquery.counterup.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/jquery-countdown/dist/jquery.countdown.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}?{% now 'U' %}"></script>
+<script src="{% static '/vendor/prismjs/prism.js' %}"></script>
+<script src="{% static '/vendor/jquery-hitcount/jquery.postcsrf.js' %}?{% now 'U' %}"></script>
+<script src="{% static 'django_ckeditor_5/dist/bundle.js' %}?{% now 'U' %}"></script>
+
+<script async defer="defer" src="https://buttons.github.io/buttons.js"></script><!-- Neumorphism JS -->
+
+<script type="module" src="https://unpkg.com/@dotlottie/player-component@1.0.0/dist/dotlottie-player.js"></script>
+
+<!-- Neumorphism JS -->
+<script src="{% static 'js/neumorphism.js' %}?{% now 'U' %}"></script>
+
+<script src="{% static 'vendor/jquery.blueimp-gallery.min.js' %}?{% now 'U' %}"></script>
+
+<script>
+    blueimp.Gallery(document.getElementById('links').getElementsByTagName('a'), {
+        container: '#blueimp-gallery-carousel',
+        carousel: true
+    })
+</script>
+
+<script>
+    var data = {
+        title: 'JavaScript Templates',
+        license: {
+            name: 'MIT license',
+            url: 'https://opensource.org/licenses/MIT'
+        },
+        features: ['lightweight & fast', 'powerful', 'zero dependencies']
+    }
+</script>
+
+<script>
+    var fullscreenOptions = {
+        // Defines if the gallery should open in fullscreen mode:
+        fullscreen: false
+    }
+</script>

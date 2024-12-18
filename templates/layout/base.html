@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load static %}
+{% load base %}
+{% load general_settings %}
+{% meta_neumorphism as meta_neumorphism %}
+{% neuromorphism_general_settings as general_settings %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
+{% if general_settings is not None %}
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <!-- Primary Meta Tags -->
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="x-apple-disable-message-reformatting">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        {% for site in meta_neumorphism %}
+            <!-- {{ site.description|title }} -->
+            <meta name="{{ site.name }}" content="{{ site.content }}">
+        {% endfor %}
+
+
+        <!-- Favicon -->
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'favicon/apple-touch-icon.png' %}?{% now 'U' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}?{% now 'U' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}?{% now 'U' %}">
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}?{% now 'U' %}">
+        <link rel="mask-icon" href="{% static 'favicon/safari-pinned-tab.svg' %}?{% now 'U' %}" color="#ffffff">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="theme-color" content="#ffffff">
+
+        <!-- Fontawesome -->
+        <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+              rel="stylesheet">
+
+        <!-- Pixel CSS -->
+        <link type="text/css" href="{% static '/css/neumorphism.css' %}?{% now 'U' %}" rel="stylesheet">
+
+        <link rel="stylesheet" href="{% static 'vendor/blueimp-gallery.min.css' %}?{% now 'U' %}"/>
+
+        <!-- Specific Page CSS goes HERE  -->
+        {% block stylesheets %}{% endblock %}
+
+    </head>
+
+    <body>
+
+    <header class="header-global">
+
+        {% include 'include/navbar.html' %}
+
+    </header>
+
+    <main>
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+    {% include 'include/footer.html' %}
+
+    {% include 'include/js.html' %}
+
+    {% block javascripts %}{% endblock %}
+
+
+    </body>
+
+    </html>
+{% else %}
+    {% include "pages/cover.html" %}
+{% endif %}

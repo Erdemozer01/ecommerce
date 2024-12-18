@@ -1,0 +1,138 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+    İletişim
+{% endblock %}
+
+{% block content %}
+
+    <main>
+        <!-- Section -->
+        <section class="section section-lg">
+            <div class="container">
+
+                <div class="row align-items-center justify-content-center">
+
+                    <div class="col-12 col-md-12 col-lg-12 mt-6">
+                        <div class="display-2 mb-2 p-3">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.tags == 'error' %}
+                                        <div class="alert alert-danger alert-dismissible shadow-soft fade show"
+                                             role="alert">
+                                    {% else %}
+                                        <div class="alert alert-{{ message.tags }} alert-dismissible shadow-soft fade show"
+                                             role="alert">
+                                    {% endif %}
+
+                                <span class="alert-inner--icon">
+                                        {% if message.tags == 'error' %}
+                                            <span class="fa fas fa-paper-plane text-danger"></span>
+                                        {% elif message.tags == 'success' %}
+                                            <span class="fas fa-paper-plane text-success"></span>
+                                        {% else %}
+
+                                        {% endif %}
+                                    </span>
+
+                                <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
+
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-lg-12 mb-5">
+                        <!-- Contact Card -->
+                        <div class="card bg-primary shadow-soft border-light p-2 p-md-3 p-lg-5">
+                            <div class="card-header">
+                                <div class="row justify-content-center">
+                                    <div class="col-12">
+                                        <div class="shadow-inset p-4 mb-5 rounded">
+                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d788.6190463882025!2d29.08799216959982!3d37.755431298249405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c73f1c46443a9b%3A0x2d0cbde374d6980a!2sMehmet%C3%A7ik%2C%201299.%20Sk.%2017-13%2C%2020150%20Pamukkale%2FDenizli!5e0!3m2!1str!2str!4v1734279822216!5m2!1str!2str"
+                                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map rounded "></iframe>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-8 text-center mb-5">
+                                        <h1 class="display-2 mb-3">Get in touch today</h1>
+                                        <p class="lead">Have a new project in mind? Need help with an ongoing one? Drop
+                                            us a line about your project needs, we answer same day.</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-4 col-lg-4 text-center">
+                                        <!-- Visit Box -->
+                                        <div class="icon-box mb-4">
+                                            <div class="icon icon-shape shadow-soft border-light rounded-circle mb-4">
+                                                <span class="fas fa-map-marker-alt"></span>
+                                            </div>
+                                            <h2 class="h5 icon-box-title">Visit us</h2>
+                                            <span>
+                                                27 Silicon Valley
+                                                <br>
+                                                USA, California
+                                            </span>
+                                        </div>
+                                        <!-- End of Visit Box -->
+                                    </div>
+                                    <div class="col-md-4 col-lg-4 text-center">
+                                        <!-- Call Box -->
+                                        <div class="icon-box mb-4">
+                                            <div class="icon icon-shape shadow-soft border-light rounded-circle mb-4">
+                                                <span class="fas fa-headphones-alt"></span>
+                                            </div>
+                                            <h2 class="h5 icon-box-title">Call</h2>
+                                            <span>+3912345678</span>
+                                            <div class="text-small text-gray">
+                                                Mon - Fri, 8am - 4pm
+                                            </div>
+                                        </div>
+                                        <!-- End of Call Box -->
+                                    </div>
+                                    <div class="col-md-4 col-lg-4 text-center">
+                                        <!-- Email Box -->
+                                        <div class="icon-box mb-4">
+                                            <div class="icon icon-shape shadow-soft border-light rounded-circle mb-4">
+                                                <span class="far fa-paper-plane"></span>
+                                            </div>
+                                            <h2 class="h5 icon-box-title">Email</h2>
+                                            <a href="#">example@company.com</a>
+                                            <br><a href="#">name@company.com</a>
+                                        </div>
+                                        <!-- End of Email Box -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form class="col-12 col-md-8 mx-auto" method="post" action="{% url 'store:contact' %}">
+                                {% csrf_token %}
+                                <!-- Form -->
+                                <div class="form-group">
+                                    {% bootstrap_form form %}
+                                </div>
+
+                                <div class="card-footer px-0 mx-auto">
+                                    <button type="submit" class="btn btn-block btn-primary">Gönder</button>
+                                </div>
+                            </form>
+
+                        </div>
+                        <!-- End of Contact Card -->
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- End of section -->
+    </main>
+{% endblock %}
+
+

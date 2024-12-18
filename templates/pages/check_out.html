@@ -1,0 +1,96 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block title %} Satın al {% endblock %}
+
+{% block content %}
+    <main class="container " style="margin-top: 10%">
+        <div class="py-5 text-center">
+            <h2>Ödeme Sayfası</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger alert-dismissible shadow-soft fade show"
+                             role="alert">
+                    {% else %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible shadow-soft fade show"
+                             role="alert">
+                    {% endif %}
+
+                <span class="alert-inner--icon">
+                                        {% if message.tags == 'error' %}
+                                            <span class="far fa-thumbs-down"></span>
+                                        {% elif message.tags == 'success' %}
+                                            <span class="far fa-thumbs-up"></span>
+                                        {% else %}
+
+                                        {% endif %}
+                                    </span>
+
+                <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+
+            <div class="row g-5">
+                <div class="col-md-5 col-lg-4 order-md-last">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-info">Sepetim</span>
+                        <span class="badge badge-info rounded-pill">{{ cart_total_products }}</span>
+                    </h4>
+
+                    <ul class="list-group mb-3">
+                        {% for my_cart in my_cart_list %}
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <div>
+                                    <small class="my-0">{{ my_cart.product.title }} x {{ my_cart.quantity }}</small>
+                                </div>
+                                <small class="text-body-secondary font-weight-bold">{{ my_cart.items_total }} </small>
+                            </li>
+                        {% endfor %}
+                        {% if cart.app_promo %}
+                            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                                <div class="text-success">
+                                    <h6 class="my-0">Promosyon Kodu</h6>
+                                    <small>{{ cart.promo }}</small>
+                                </div>
+                                <span class="text-success"> {{ dis }} TL</span>
+                            </li>
+                        {% endif %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Toplam (TL)</span>
+                            <strong>{{ cart.total }}</strong>
+                        </li>
+                    </ul>
+
+                    <form class="card p-2" action="{% url "store:promo_code" request.user cart_id %}" method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="İndirim Kodu" name="promote_code"
+                                   value="{{ request.GET.promote_code }}">
+                            <button type="submit" class="btn btn-primary">Uygula</button>
+                        </div>
+                    </form>
+
+                    <a class="w-100 btn btn-primary btn-lg mb-6 mt-2"
+                       href="{% url 'store:my_cart_list' request.user cart_id %}">Sepete
+                        Git</a>
+
+                </div>
+                <div class="col-md-7 col-lg-8">
+                    <h4 class="mb-3">Kişisel Bilgiler</h4>
+
+                    <form class="needs-validation" method="post">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        <hr class="my-4">
+                        <button class="w-100 btn btn-primary btn-lg mb-6" type="submit">Ödemeye Geç</button>
+                    </form>
+                </div>
+            </div>
+    </main>
+{% endblock %}
