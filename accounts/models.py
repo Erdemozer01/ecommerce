@@ -27,7 +27,6 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now=True, verbose_name='Katılma Tarihi', blank=True)
 
 
-
     def __str__(self):
         return str(self.user)
 
