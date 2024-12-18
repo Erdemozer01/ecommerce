@@ -140,10 +140,12 @@ class StoreListView(ListView):
     paginate_by = 9
 
     def get(self, request, *args, **kwargs):
-        if PromoCodeModel:
+        try:
             for promo in PromoCodeModel.objects.all():
                 if promo.promo_end_date < now():
                     promo.delete()
+        except PromoCodeModel.DoesNotExist:
+            pass
         return super(StoreListView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
