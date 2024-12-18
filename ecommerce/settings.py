@@ -27,8 +27,8 @@ INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'accounts.apps.AccountsConfig',
     'settings.apps.SettingsConfig',
+    ###
     'hitcount',
-
     'django_cleanup',
     "django_bootstrap5",
     'django_ckeditor_5',
@@ -46,8 +46,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
-
-
 
 ROOT_URLCONF = 'ecommerce.urls'
 
