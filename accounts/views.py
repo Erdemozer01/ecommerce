@@ -18,6 +18,7 @@ from django.template.loader import get_template
 from django.shortcuts import render, HttpResponse
 from django.core import mail
 
+
 class UserRegister(generic.CreateView):
     template_name = "registration/sign-up.html"
     form_class = UserRegistrationForm
@@ -30,7 +31,6 @@ class UserRegister(generic.CreateView):
 
 
 def ProfileUpdateView(request, user):
-
     if request.user.is_anonymous:
         messages.error(request, "Lütfen giriş yapınız")
         return redirect('login')
@@ -48,9 +48,7 @@ def ProfileUpdateView(request, user):
         CartItems.objects.filter(cart__cart_id=request.session.session_key).aggregate(Sum('quantity'))[
             'quantity__sum']
 
-
     total = 0
-
 
     if request.method == "POST":
 
@@ -78,7 +76,6 @@ def ProfileUpdateView(request, user):
         user_form = UserEditForm(instance=user)
         profile_form = UserProfileEditForm(instance=profile)
 
-
     if request.user.is_authenticated:
 
         wish_list_products = Product.objects.filter(wish_list__username=request.user)
@@ -102,8 +99,6 @@ def ProfileUpdateView(request, user):
 
         product = Product.objects.all()
 
-
-
     return render(
         request,
         "pages/profil.html",
@@ -123,7 +118,6 @@ class UserDeleteView(DeleteView):
     success_url = reverse_lazy("store:store_home")
     form_class = UserDeleteForm
 
-
     def get(self, request, *args, **kwargs):
         if request.user.is_anonymous:
             messages.error(request, "Lütfen giriş yapınız")
@@ -137,12 +131,8 @@ class UserDeleteView(DeleteView):
         return HttpResponseRedirect(self.success_url)
 
 
-
 class PasswordResetView(views.PasswordResetView):
     from_email = settings.EMAIL_HOST_USER
-
-
-
 
 
 def email_confirm_view(request, pk, email):
