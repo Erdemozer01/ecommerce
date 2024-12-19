@@ -11,7 +11,7 @@ def cover(instance, filename):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Kullanıcı Adı', related_name='profile')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Kullanıcı Adı', related_name='profile')
     first_name = models.CharField(max_length=150, verbose_name="Ad")
     last_name = models.CharField(max_length=150, verbose_name="Soyad")
     email = models.EmailField(verbose_name="Email", unique=True)
