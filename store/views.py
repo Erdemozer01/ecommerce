@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from settings.models import SiteSettingModels
 from django.contrib import messages
 
 from django.http import HttpResponseRedirect
@@ -15,7 +16,7 @@ from hitcount.views import HitCountDetailView
 from accounts.forms import CheckOutForm
 from .forms import PromoCodeForm, ContactForm
 from django.utils.timezone import now
-
+from django.core.mail import send_mail
 
 class ProductCategoryView(ListView):
     template_name = "pages/category_list.html"
@@ -925,19 +926,24 @@ def unsubscribe(request, unsubscribe_email):
 
 
 def contact(request):
+
+    neumorphism = SiteSettingModels.objects.filter(is_active=True).get(theme__icontains='neumorphism')
     form = ContactForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             instance = form.save(commit=False)
-            from django.core.mail import send_mail
-            from_email = settings.EMAIL_HOST_USER
-            to_email = [instance.email]
-            subject = instance.subject
-            message = instance.message
-            send_mail(subject, message, from_email, to_email, fail_silently=False)
+            try:
+
+                from_email = settings.EMAIL_HOST_USER
+                to_email = [instance.email]
+                subject = instance.subject
+                message = instance.message
+                send_mail(subject, message, from_email, to_email, fail_silently=False)
+            except:
+                pass
             messages.success(request, "Mesajınız gönderildi")
             instance.save()
 
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    return render(request, 'pages/contact.html', {'form': form})
+    return render(request, 'pages/contact.html', {'form': form, 'neumorphism':neumorphism})

@@ -4,28 +4,24 @@ class SiteSettingModels(models.Model):
     class Theme(models.TextChoices):
         NEUROMORH = 'neumorphism', 'Neumorphism'
 
-    theme = models.CharField(max_length=100, verbose_name="Site Teması", blank=True, null=True, choices=Theme.choices,)
-    name = models.CharField(max_length=100, verbose_name="Site Adı", unique=True, blank=True, null=True, )
-    explain = models.TextField(verbose_name="Site Açıklaması", help_text="Kısaca nasıl bir site ve ne nesitesi ? ",
-                               blank=True, null=True)
-    email = models.EmailField(verbose_name="Email", blank=True, null=True)
+    theme = models.CharField(max_length=100, verbose_name="Site Teması", choices=Theme.choices,)
+    name = models.CharField(max_length=100, verbose_name="Site Adı", unique=True, )
+    explain = models.TextField(verbose_name="Site Açıklaması", help_text="Kısaca nasıl bir site biraz bahsedin...")
+    email = models.EmailField(verbose_name="Email")
     email_password = models.CharField(max_length=128, verbose_name='Email Şifresi',)
 
     phone = models.CharField(max_length=130, verbose_name="Telefon", blank=True, null=True)
     address = models.CharField(max_length=250, verbose_name="Adres:", blank=True, null=True)
+
+    google_map = models.TextField(verbose_name="Google Haritadaki Konumunuz", help_text="Google Haritadaki iframe bağlantısı", blank=True, null=True)
     url = models.URLField(verbose_name="URL", blank=True, null=True)
     logo = models.ImageField(upload_to="logo/", verbose_name="Logo", blank=True, null=True)
-
     is_active = models.BooleanField(default=False, verbose_name="Site Aktif mi ?")
 
     created = models.DateTimeField(auto_now_add=True, verbose_name="oluşturulma tarihi")
 
     def __str__(self):
         return self.theme or self.name or "Site Ayarı"
-
-    @property
-    def password_display(self):
-        return self.password.set_password(self.password)
 
     class Meta:
         verbose_name = "Site Ayarı"

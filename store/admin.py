@@ -5,13 +5,13 @@ from django.contrib import admin
 from django.contrib import messages as messages_info
 from django.http import HttpResponseRedirect
 from django.utils.timezone import now
-from django.core.mail import send_mail
+
 from django.conf import settings
 from django.contrib import messages
 from store.models import Product, ProductImage, ProductCategory, ProductComments, PromoCodeModel, Subscribe, Contact, \
     NewsLetter
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string, get_template
+from django.template.loader import get_template
 from django.shortcuts import render, HttpResponse
 from article.models import Posts
 from django.core import mail

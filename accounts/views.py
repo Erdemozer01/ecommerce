@@ -1,3 +1,4 @@
+import os
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
@@ -11,7 +12,11 @@ from .models import Profile
 from .forms import UserRegistrationForm, UserEditForm, UserProfileEditForm, UserDeleteForm
 from django.contrib.auth.models import User
 from django.conf import settings
-
+from django.contrib.auth import views
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.shortcuts import render, HttpResponse
+from django.core import mail
 
 class UserRegister(generic.CreateView):
     template_name = "registration/sign-up.html"
@@ -133,3 +138,15 @@ class UserDeleteView(DeleteView):
 
 
 
+class PasswordResetView(views.PasswordResetView):
+    from_email = settings.EMAIL_HOST_USER
+
+
+
+
+
+def email_confirm_view(request, pk, email):
+    user = get_object_or_404(Profile, pk=pk, user=request.user, email=email)
+    user.email_confirmed = True
+    user.save()
+    return redirect('password_reset_confirm')

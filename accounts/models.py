@@ -14,7 +14,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Kullanıcı Adı', related_name='profile')
     first_name = models.CharField(max_length=150, verbose_name="Ad")
     last_name = models.CharField(max_length=150, verbose_name="Soyad")
-    email = models.EmailField(verbose_name="Email")
+    email = models.EmailField(verbose_name="Email", unique=True)
+    email_confirmed = models.BooleanField(default=False, verbose_name="Email onaylandı")
     country = models.CharField(max_length=100, verbose_name='Ülke', blank=True)
     city = models.CharField(max_length=100, verbose_name='Şehir', blank=True)
     location = models.CharField(max_length=100, verbose_name='İlçe', blank=True)
@@ -29,6 +30,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user)
+
 
     class Meta:
         db_table = 'profile'

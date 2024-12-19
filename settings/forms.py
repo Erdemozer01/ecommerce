@@ -9,3 +9,5 @@ class SiteSettingModelsForm(forms.ModelForm):
         widgets = {
             'email_password': forms.PasswordInput(render_value=True),
         }
+
+
