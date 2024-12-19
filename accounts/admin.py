@@ -27,7 +27,8 @@ class CartItemsAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'email', 'first_name', 'last_name', 'created']
-    search_fields = ['first_name', 'last_name']
+    search_fields = ['user', 'first_name', 'last_name', 'email']
+    search_help_text = "Kullanıcı adı, ad soyad, email adresine göre ara"
     list_filter = ['created']
     ordering = ['-created']
     list_per_page = 25
