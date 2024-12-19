@@ -1,4 +1,8 @@
 import os
+
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.views import PasswordResetView
+from django.db import connection
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
@@ -131,7 +135,7 @@ class UserDeleteView(DeleteView):
         return HttpResponseRedirect(self.success_url)
 
 
-class PasswordResetView(views.PasswordResetView):
+class PasswordReset(PasswordResetView):
     from_email = settings.EMAIL_HOST_USER
 
 
