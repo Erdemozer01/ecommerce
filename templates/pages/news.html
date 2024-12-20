@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 
 <html lang="en-GB" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
@@ -239,9 +241,9 @@
                                                     <div style="max-width: 570px;">
                                                         <a href="#" style="outline:none" tabindex="-1" target="_blank">
                                                             <img alt="{{ obj.title }}" height="auto"
-                                                            src="{{ neumorphism_site.url }}media/{{ obj.image.url }}"
-                                                            style="display: block; height: auto; border: 0; width: 100%;"
-                                                            width="570"/>
+                                                                 src="{{ neumorphism_site.url }}media/{{ obj.image.url }}"
+                                                                 style="display: block; height: auto; border: 0; width: 100%;"
+                                                                 width="570"/>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -326,10 +328,12 @@
                                         <tr>
                                             <td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
                                                 <div align="center" class="alignment" style="line-height:10px">
-                                                    <div style="max-width: 180px;"><img alt="" height="auto"
-                                                                                        src="/static/img/Divider_1.png"
-                                                                                        style="display: block; height: auto; border: 0; width: 100%;"
-                                                                                        title="" width="180"/></div>
+                                                    <div style="max-width: 180px;">
+                                                        <img alt="" height="auto"
+                                                             src="{% static 'img/Divider_1.png' %}"
+                                                             style="display: block; height: auto; border: 0; width: 100%;"
+                                                             title="" width="180"/>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -475,6 +479,7 @@
 
 
 
+
                                                                             {{ domain }}{% url 'store:product_detail' product.pk product.brand|slugify product.slug %}"
                                                                     style="outline:none" tabindex="-1"
                                                                     target="_blank"><img
@@ -538,6 +543,7 @@
                                                                     <center dir="false"
                                                                             style="color:#ecefe6;font-family:Tahoma, Verdana, sans-serif;font-size:18px">
                                                             <![endif]--><a class="button" href="{{ protocol }}://
+
 
 
 
@@ -740,7 +746,8 @@
                                                         style="width:100%;padding-right:0px;padding-left:0px;">
                                                         <div align="center" class="alignment" style="line-height:10px">
                                                             <div style="max-width: 150px;"><a
-                                                                    href="{{ protocol }}://{{ domain }}{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
+                                                                    href="{{ protocol }}://
+                                                                            {{ domain }}{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
                                                                     style="outline:none"
                                                                     tabindex="-1"
                                                                     target="_blank"><img
@@ -790,7 +797,8 @@
                                                                 <v:textbox inset="0px,0px,0px,0px">
                                                                     <center dir="false"
                                                                             style="color:#ecefe6;font-family:Tahoma, Verdana, sans-serif;font-size:18px">
-                                                            <![endif]--><a class="button" href="{{ protocol }}://{{ domain }}{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
+                                                            <![endif]--><a class="button" href="{{ protocol }}://
+                                                                    {{ domain }}{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
                                                                            style="background-color:#35524a;border-bottom:0px solid transparent;border-left:0px solid transparent;border-radius:20px;border-right:0px solid transparent;border-top:0px solid transparent;color:#ecefe6;display:inline-block;font-family:'Ubuntu', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;font-weight:300;mso-border-alt:none;padding-bottom:3px;padding-top:3px;text-align:center;text-decoration:none;width:auto;word-break:keep-all;"
                                                                            target="_blank"><span
                                                                     style="word-break: break-word; padding-left: 20px; padding-right: 20px; font-size: 18px; display: inline-block; letter-spacing: 1px;"><span
@@ -975,10 +983,11 @@
                                                 <div style="color:#ffffff;direction:ltr;font-family:'Ubuntu', Tahoma, Verdana, Segoe, sans-serif;font-size:13px;font-weight:300;letter-spacing:1px;line-height:150%;text-align:center;mso-line-height-alt:19.5px;">
                                                     <p style="margin: 0; margin-bottom: 16px;">Bu E-postayı email
                                                         bültenimize abone olduğunuz için alıyorsunuz.</p>
-                                                    <p style="margin: 0;">E-Posta almak istemiyorsanız <a href="{{ neumorphism_site.url }}/unsubscribe/{{ unsubscribe_email }}/"
-                                                                                                          rel="noopener"
-                                                                                                          style="text-decoration: underline; color: #ffffff;"
-                                                                                                          target="_blank">Tıklayın</a>.
+                                                    <p style="margin: 0;">E-Posta almak istemiyorsanız <a
+                                                            href="{{ neumorphism_site.url }}/unsubscribe/{{ unsubscribe_email }}/"
+                                                            rel="noopener"
+                                                            style="text-decoration: underline; color: #ffffff;"
+                                                            target="_blank">Tıklayın</a>.
                                                     </p>
                                                 </div>
                                             </td>
