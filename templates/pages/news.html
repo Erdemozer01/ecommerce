@@ -668,11 +668,12 @@
                                                                     href="{{ neumorphism_site.url }}/{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
                                                                     style="outline:none"
                                                                     tabindex="-1"
-                                                                    target="_blank"><img
-                                                                    alt="I'm an image" height="auto"
-                                                                    src="{{ post.cover.url }}"
-                                                                    style="display: block; height: auto; border: 0; width: 100%;"
-                                                                    title="I'm an image" width="150"/></a></div>
+                                                                    target="_blank">
+                                                                <img height="auto"
+                                                                        src="{{ neumorphism_site.url }}/{{ post.cover.url }}"
+                                                                        style="display: block; height: auto; border: 0; width: 100%;"
+                                                                        width="150"/></a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -716,6 +717,7 @@
                                                                     <center dir="false"
                                                                             style="color:#ecefe6;font-family:Tahoma, Verdana, sans-serif;font-size:18px">
                                                             <![endif]--><a class="button" href="{{ protocol }}://
+
 
 
                                                                     {{ domain }}{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
