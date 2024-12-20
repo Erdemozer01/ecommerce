@@ -502,7 +502,8 @@
                                                                 <v:textbox inset="0px,0px,0px,0px">
                                                                     <center dir="false"
                                                                             style="color:#ecefe6;font-family:Tahoma, Verdana, sans-serif;font-size:18px">
-                                                            <![endif]--><a class="button" href="{{ neumorphism_site.url }}/{% url 'store:product_detail' product.pk product.brand|slugify product.slug %}"
+                                                            <![endif]--><a class="button"
+                                                                           href="{{ neumorphism_site.url }}/{% url 'store:product_detail' product.pk product.brand|slugify product.slug %}"
                                                                            style="background-color:#35524a;border-bottom:0px solid transparent;border-left:0px solid transparent;border-radius:20px;border-right:0px solid transparent;border-top:0px solid transparent;color:#ecefe6;display:inline-block;font-family:'Ubuntu', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;font-weight:300;mso-border-alt:none;padding-bottom:3px;padding-top:3px;text-align:center;text-decoration:none;width:auto;word-break:keep-all;"
                                                                            target="_blank"><span
                                                                     style="word-break: break-word; padding-left: 20px; padding-right: 20px; font-size: 18px; display: inline-block; letter-spacing: 1px;"><span
@@ -664,9 +665,7 @@
                                                         style="width:100%;padding-right:0px;padding-left:0px;">
                                                         <div align="center" class="alignment" style="line-height:10px">
                                                             <div style="max-width: 150px;"><a
-                                                                    href="{{ protocol }}://
-
-                                                                            {{ domain }}{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
+                                                                    href="{{ neumorphism_site.url }}/{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
                                                                     style="outline:none"
                                                                     tabindex="-1"
                                                                     target="_blank"><img
@@ -717,6 +716,7 @@
                                                                     <center dir="false"
                                                                             style="color:#ecefe6;font-family:Tahoma, Verdana, sans-serif;font-size:18px">
                                                             <![endif]--><a class="button" href="{{ protocol }}://
+
 
                                                                     {{ domain }}{% url 'article:article_detail' post.pk post.category|slugify post.slug %}"
                                                                            style="background-color:#35524a;border-bottom:0px solid transparent;border-left:0px solid transparent;border-radius:20px;border-right:0px solid transparent;border-top:0px solid transparent;color:#ecefe6;display:inline-block;font-family:'Ubuntu', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;font-weight:300;mso-border-alt:none;padding-bottom:3px;padding-top:3px;text-align:center;text-decoration:none;width:auto;word-break:keep-all;"
@@ -789,7 +789,7 @@
 
             {% if article_list or product_list %}
                 <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-12" role="presentation"
-                       style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                       style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; margin-bottom: 4%" width="100%">
                     <tbody>
                     <tr>
                         <td>
@@ -838,6 +838,8 @@
                     </tbody>
                 </table>
             {% endif %}
+
+            <!-- Footer -->
             <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-13" role="presentation"
                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
                 <tbody>
