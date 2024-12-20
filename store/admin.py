@@ -188,7 +188,7 @@ class NewsLetterAdmin(admin.ModelAdmin):
 
                 template_name = os.path.join(settings.BASE_DIR, "templates", "pages", "news.html")
                 template = get_template(template_name)
-                context = {"product_list": product_list, 'obj': obj, 'unsubscribe_email': subscriber.email, 'article_list': article_list}
+                context = {"product_list": product_list, 'obj': obj, 'unsubscribe_email': subscriber.email, 'article_list': article_list, 'neumorphism_site': neumorphism_site}
                 html_content = template.render(context)
                 body = HttpResponse(html_content).content.decode("utf-8")
                 msg = EmailMultiAlternatives(
