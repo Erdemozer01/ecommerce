@@ -15,6 +15,7 @@ from django.template.loader import get_template
 from django.shortcuts import render, HttpResponse
 from article.models import Posts
 from django.core import mail
+from settings.models import SiteSettingModels
 
 
 @admin.register(ProductCategory)
@@ -69,10 +70,8 @@ class ProductAdmin(admin.ModelAdmin):
         success_count = 0
         failure_count = 0
 
-
         if len(Subscribe.objects.all()) == 0:
             messages.error(message="Henüz kimse abone olmadığı için işlem gerçekleştirilemedi", request=request)
-
 
         for subscriber in Subscribe.objects.all():
             try:
@@ -145,13 +144,12 @@ class NewsLetterAdmin(admin.ModelAdmin):
     @admin.action(description='Seçtiğiniz konuyu abonelere e-posta ile gönder')
     def send_email(self, request, queryset):
 
-        from settings.models import SiteSettingModels
         try:
             neumorphism_site = SiteSettingModels.objects.get(is_active=True, theme__icontains="neumorphism")
             from_email = neumorphism_site.email
-
         except SiteSettingModels.DoesNotExist:
             neumorphism_site = None
+
         # E-posta gönderim işlemi
         try:
             connection = mail.get_connection()
@@ -177,7 +175,7 @@ class NewsLetterAdmin(admin.ModelAdmin):
 
             try:
                 if obj.is_discount:
-                    product_list = Product.objects.filter(is_discount=True).order_by('-updated')[:10]
+                    product_list = Product.objects.order_by('-updated')[:10]
                 else:
                     product_list = None
 
@@ -188,7 +186,8 @@ class NewsLetterAdmin(admin.ModelAdmin):
 
                 template_name = os.path.join(settings.BASE_DIR, "templates", "pages", "news.html")
                 template = get_template(template_name)
-                context = {"product_list": product_list, 'obj': obj, 'unsubscribe_email': subscriber.email, 'article_list': article_list, 'neumorphism_site': neumorphism_site}
+                context = {"product_list": product_list, 'obj': obj, 'unsubscribe_email': subscriber.email,
+                           'article_list': article_list, 'neumorphism_site': neumorphism_site}
                 html_content = template.render(context)
                 body = HttpResponse(html_content).content.decode("utf-8")
                 msg = EmailMultiAlternatives(
