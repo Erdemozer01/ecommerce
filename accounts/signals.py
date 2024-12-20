@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
-from django.db import IntegrityError, transaction
+from django.conf import settings
+from settings.models import SiteSettingModels
 
 from .models import Profile
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, pre_init
 
 
 @receiver(post_save, sender=User)
@@ -24,3 +25,4 @@ def delete_user(sender, instance=None, **kwargs):
         pass
     else:
         instance.user.delete()
+

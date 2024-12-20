@@ -1,6 +1,6 @@
 import os
 
-from django.contrib.auth.forms import PasswordResetForm
+from settings.models import SiteSettingModels
 from django.contrib.auth.views import PasswordResetView
 from django.db import connection
 from django.http import HttpResponseRedirect
@@ -21,7 +21,6 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.shortcuts import render, HttpResponse
 from django.core import mail
-
 
 class UserRegister(generic.CreateView):
     template_name = "registration/sign-up.html"
@@ -136,7 +135,17 @@ class UserDeleteView(DeleteView):
 
 
 class PasswordReset(PasswordResetView):
-    from_email = settings.EMAIL_HOST_USER
+
+    def form_valid(self, form):
+        print(form.cleaned_data.get('email'))
+        queryset = SiteSettingModels.objects.get(theme__icontains='neumorphism', is_active=True)
+        email = form.cleaned_data['email']
+        from django.core.mail.backends.smtp import EmailBackend
+        connection = EmailBackend(
+            username=queryset.email,
+            password=queryset.email_password
+        )
+        connection.send_messages([email])
 
 
 def email_confirm_view(request, pk, email):

@@ -13,4 +13,3 @@ def neuromorphism_general_settings():
             return site
     except:
         return None
-
