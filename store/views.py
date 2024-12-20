@@ -141,6 +141,7 @@ class StoreListView(ListView):
     paginate_by = 9
 
     def get(self, request, *args, **kwargs):
+
         try:
             for promo in PromoCodeModel.objects.all():
                 if promo.promo_end_date < now():

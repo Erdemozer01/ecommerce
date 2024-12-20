@@ -115,6 +115,7 @@ class UserDeleteView(DeleteView):
     form_class = UserDeleteForm
 
     def get(self, request, *args, **kwargs):
+
         if request.user.is_anonymous:
             messages.error(request, "Lütfen giriş yapınız")
             return redirect(f'%s?next=/accounts/user-profil/{request.user.pk}/' % settings.LOGIN_URL)

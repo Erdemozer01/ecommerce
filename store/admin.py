@@ -144,6 +144,7 @@ class NewsLetterAdmin(admin.ModelAdmin):
     # send_email action
     @admin.action(description='Seçtiğiniz konuyu abonelere e-posta ile gönder')
     def send_email(self, request, queryset):
+
         from settings.models import SiteSettingModels
         try:
             neumorphism_site = SiteSettingModels.objects.get(is_active=True, theme__icontains="neumorphism")
