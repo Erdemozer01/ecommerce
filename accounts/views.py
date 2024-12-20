@@ -13,7 +13,7 @@ from .forms import UserRegistrationForm, UserEditForm, UserProfileEditForm, User
 from django.contrib.auth.models import User
 from django.conf import settings
 from settings.models import SiteSettingModels
-
+from django.contrib.auth.views import PasswordResetView
 
 class UserRegister(generic.CreateView):
     template_name = "registration/sign-up.html"
