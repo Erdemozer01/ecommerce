@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_init
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from settings.models import SiteSettingModels

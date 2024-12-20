@@ -198,7 +198,7 @@
                                     </div>
 
                                 {% endif %}
-                            
+
                                 {% if product_categories_last %}
                                     <div class="col pl-0">
                                         <ul class="list-style-none">
@@ -288,9 +288,9 @@
                             <span class="fa fa-user text-info" title="Hoş Geldiniz, {{ request.user }}"
                                   data-toggle="tooltip"></span>
                         {% else %}
-                            <a href="{% url "login" %}" target="_blank">
-                                <i class="fas fa-sign-in " style="margin-bottom: 10px"></i>
-                                Giriş
+                            <a href="{% url "login" %}" target="_blank" class="btn btn-sm btn-soft" data-toggle="tooltip" title="Giriş yap yada üye ol">
+                                <span>Giriş</span>
+                                <small class="fa fa-sm fa-sign-in "></small>
                             </a>
                         {% endif %}
                     </a>
@@ -302,6 +302,11 @@
                                 <a class="dropdown-item animate-hover"
                                    href="{% url 'accounts:profile_update' request.user %}">
                                     <span class="fa fa-user mr-1 animate-up-1"></span>Kullanıcı Bilgileri</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item animate-hover"
+                                   href="{% url 'password_reset' %}">
+                                    <span class="fa fa-file-contract mr-2 animate-up-1"></span>Şifre sıfırlama</a>
                             </li>
                         {% endif %}
 

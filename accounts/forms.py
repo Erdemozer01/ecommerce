@@ -1,5 +1,6 @@
 import os.path
 
+from settings.models import SiteSettingModels
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
@@ -8,6 +9,7 @@ from .models import Profile
 from store.city import country_list, turkey_cities
 
 from django.conf import settings
+
 
 class UserRegistrationForm(UserCreationForm):
     terms = forms.BooleanField(required=True, label="Kullanıcı Şartlarını kabul ediyorum.")
@@ -80,5 +82,4 @@ class CheckOutForm(forms.ModelForm):
             'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
             'birth_day': forms.DateInput(attrs={'type': 'date', }, format='%Y-%m-%d'),
         }
-
 

@@ -15,7 +15,6 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=150, verbose_name="Ad")
     last_name = models.CharField(max_length=150, verbose_name="Soyad")
     email = models.EmailField(verbose_name="Email", unique=True)
-    email_confirmed = models.BooleanField(default=False, verbose_name="Email onaylandı")
     country = models.CharField(max_length=100, verbose_name='Ülke', blank=True)
     city = models.CharField(max_length=100, verbose_name='Şehir', blank=True)
     location = models.CharField(max_length=100, verbose_name='İlçe', blank=True)
@@ -26,7 +25,6 @@ class Profile(models.Model):
     birth_day = models.DateField(blank=True, null=True, verbose_name='Doğum Tarihi:')
 
     created = models.DateTimeField(auto_now=True, verbose_name='Katılma Tarihi', blank=True)
-
 
     def __str__(self):
         return str(self.user.username)

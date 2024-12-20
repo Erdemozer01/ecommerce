@@ -926,16 +926,17 @@ def unsubscribe(request, unsubscribe_email):
 
 
 def contact(request):
-
-    neumorphism = SiteSettingModels.objects.filter(is_active=True).get(theme__icontains='neumorphism')
+    try:
+        neumorphism = SiteSettingModels.objects.filter(is_active=True).get(theme__icontains='neumorphism')
+    except SiteSettingModels.DoesNotExist:
+        neumorphism = False
     form = ContactForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             instance = form.save(commit=False)
             try:
-
                 from_email = settings.EMAIL_HOST_USER
-                to_email = [instance.email]
+                to_email = settings.EMAIL_HOST_USER
                 subject = instance.subject
                 message = instance.message
                 send_mail(subject, message, from_email, to_email, fail_silently=False)

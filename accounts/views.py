@@ -1,8 +1,4 @@
-import os
-
-from settings.models import SiteSettingModels
-from django.contrib.auth.views import PasswordResetView
-from django.db import connection
+from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
@@ -16,11 +12,8 @@ from .models import Profile
 from .forms import UserRegistrationForm, UserEditForm, UserProfileEditForm, UserDeleteForm
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.contrib.auth import views
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import get_template
-from django.shortcuts import render, HttpResponse
-from django.core import mail
+from settings.models import SiteSettingModels
+
 
 class UserRegister(generic.CreateView):
     template_name = "registration/sign-up.html"
@@ -132,20 +125,6 @@ class UserDeleteView(DeleteView):
         user = self.get_object()
         user.delete()
         return HttpResponseRedirect(self.success_url)
-
-
-class PasswordReset(PasswordResetView):
-
-    def form_valid(self, form):
-        print(form.cleaned_data.get('email'))
-        queryset = SiteSettingModels.objects.get(theme__icontains='neumorphism', is_active=True)
-        email = form.cleaned_data['email']
-        from django.core.mail.backends.smtp import EmailBackend
-        connection = EmailBackend(
-            username=queryset.email,
-            password=queryset.email_password
-        )
-        connection.send_messages([email])
 
 
 def email_confirm_view(request, pk, email):
