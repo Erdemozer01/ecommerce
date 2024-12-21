@@ -241,10 +241,7 @@ class NewsLetter(models.Model):
     title = models.CharField(max_length=100, verbose_name="Konu")
     image = models.ImageField(upload_to="bülten/", verbose_name="Konu Fotosu", null=True, blank=True, )
     context = CKEditor5Field(verbose_name="Mesaj", config_name='extends', null=True, blank=True, )
-    is_discount = models.BooleanField(default=False, verbose_name="Ürün eklensin mi ?",
-                                      help_text="Son güncellenen 10 ürün gönderiye eklenecektir.")
-    is_article = models.BooleanField(default=False, verbose_name="Makale eklensin mi ?",
-                                     help_text="Son yayınlanan 10 makale gönderiye eklenecektir.")
+
     created = models.DateTimeField(auto_now_add=True, verbose_name='Oluşturulma Tarihi')
 
     def __str__(self):

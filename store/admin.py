@@ -60,9 +60,16 @@ class ProductAdmin(admin.ModelAdmin):
     list_per_page = 25
     actions = ['send_product_email']
 
-    @admin.action(description='Abonelere indirimli ürünleri e-posta ile gönder (max 10 ürün)')
+    @admin.action(description='Seçtiğiniz ürünleri abonelere gönder')
     def send_product_email(self, request, queryset):
-        product_list = queryset.filter(is_discount=True).order_by('-updated')[:10]
+        product_list = queryset.order_by('-updated')
+
+        try:
+            neumorphism_site = SiteSettingModels.objects.get(is_active=True, theme__icontains="neumorphism")
+            from_email = neumorphism_site.email
+        except SiteSettingModels.DoesNotExist:
+            neumorphism_site = None
+
         # E-posta gönderim işlemi
         connection = mail.get_connection()
         connection.open()
@@ -75,10 +82,11 @@ class ProductAdmin(admin.ModelAdmin):
 
         for subscriber in Subscribe.objects.all():
             try:
-                subject = "İndirimli ürünlerimiz"
-                template_name = os.path.join(settings.BASE_DIR, "templates", "pages", "discount_email.html")
+                subject = "Sizin için seçtiklerimiz"
+                template_name = os.path.join(settings.BASE_DIR, "templates", "pages", "product_email.html")
                 template = get_template(template_name)
-                context = {"product_list": product_list, 'subject': subject, 'unsubscribe_email': subscriber.email}
+                context = {"product_list": product_list, 'subject': subject, 'neumorphism_site': neumorphism_site,
+                           'unsubscribe_email': subscriber.email}
                 html_content = template.render(context)
                 body = HttpResponse(html_content).content.decode("utf-8")
                 msg = EmailMultiAlternatives(
@@ -132,7 +140,7 @@ class SubscribeAdmin(admin.ModelAdmin):
 @admin.register(NewsLetter)
 class NewsLetterAdmin(admin.ModelAdmin):
     model = NewsLetter
-    list_display = ['title', 'is_discount', 'is_article', 'created']
+    list_display = ['title', 'created']
     search_fields = ['title']
     search_help_text = "Başlık ile arama"
     list_filter = ['created']
