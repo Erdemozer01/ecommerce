@@ -178,14 +178,38 @@
 
             </div>
 
-
             <div class="col-md-4">
                 <div class="position-sticky" style="top: 2rem;">
                     <div class="p-4 mb-3 bg-body-tertiary rounded">
-                        <h4 class="fst-italic">About</h4>
-                        <p class="mb-0 text-justify" style="text-align: justify">Customize this section to tell your
-                            visitors a little bit about your
-                            publication, writers, content, or something else entirely. Totally up to you.</p>
+                        <h4 class="fst-italic">Paylaş</h4>
+                        <p class="mb-0 text-justify" style="text-align: justify">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+                                <button class="btn btn-icon-only btn-pill btn-facebook mr-2" type="button"
+                                        aria-label="facebook button" title="facebookda paylaş">
+                                    <span aria-hidden="true" class="fab fa-facebook"></span>
+                                </button>
+                            </a>
+
+                            <a href="https://twitter.com/intent/tweet?text={{ request.build_absolute_uri }}">
+                                <button class="btn btn-icon-only btn-pill btn-twitter mr-2" type="button"
+                                        aria-label="twitter button" title="twitterda paylaş">
+                                    <span aria-hidden="true" class="fab fa-twitter"></span>
+                                </button>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri }}">
+                                <button class="btn btn-icon-only btn-pill btn-instagram text-success mr-2"
+                                        type="button"
+                                        aria-label="whatsapp button" title="whatsappda paylaş">
+                                    <span aria-hidden="true" class="fab fa-whatsapp"></span>
+                                </button>
+                            </a>
+                            <a href="https://www.linkedin.com/cws/share/?url={{ request.build_absolute_uri }}">
+                                <button class="btn btn-icon-only btn-pill btn-instagram text-info" type="button"
+                                        aria-label="linkedin button" title="linkedinda paylaş">
+                                    <span aria-hidden="true" class="fab fa-linkedin-in"></span>
+                                </button>
+                            </a>
+                        </p>
                     </div>
 
                     <div>
