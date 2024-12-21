@@ -22,6 +22,8 @@
             <meta name="{{ site.name }}" content="{{ site.content }}">
         {% endfor %}
 
+        {% block meta_tags %}{% endblock %}
+
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="120x120" href="{% static 'favicon/apple-touch-icon.png' %}?{% now 'U' %}">
