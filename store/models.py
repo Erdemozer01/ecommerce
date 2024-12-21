@@ -33,8 +33,8 @@ class Product(models.Model):
         NO_STOCK = 'SY', 'Satıştan Kaldırıldı'
         IN_STOCK = 'SV', 'Satışta'
 
-    category = models.ForeignKey(ProductCategory, verbose_name=_('category'), related_name='product_category',
-                                 on_delete=models.CASCADE)
+    category = models.ForeignKey(ProductCategory, verbose_name=_("category"), related_name='product_category',
+                                 on_delete=models.CASCADE, help_text=_("This is the help text"))
     product_code = models.CharField(default=f"8694436{str(uuid.uuid4().int)[0:5]}", editable=False,
                                     verbose_name=_('product code'),
                                     max_length=1000)
