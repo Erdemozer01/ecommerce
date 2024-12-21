@@ -283,17 +283,16 @@
 
         <div class="d-flex align-items-lg-center">
 
-            <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2" style="margin-right: -3%;>
+            <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2" style="margin-right: -3%;">
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link" data-toggle="dropdown">
                         {% if request.user.is_authenticated %}
                             <span class="fa fa-user text-info" title="Hoş Geldiniz, {{ request.user }}"
                                   data-toggle="tooltip"></span>
                         {% else %}
-                            <a href="{% url "login" %}" target="_blank"
-                               data-toggle="tooltip" title="Giriş yap yada üye ol">
-                                <span style="margin-top: -5%">Giriş</span>
-                                <small class="fa fa-sm fa-sign-in "></small>
+                            <a href="{% url "login" %}" target="_blank" data-toggle="tooltip" title="Giriş yap yada üye ol">
+                                <span>Giriş</span>
+                                <small class="fa fa-sign-in"></small>
                             </a>
                         {% endif %}
                     </a>
