@@ -9,13 +9,18 @@
 <html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
 
 {% if general_settings is not None %}
+
     <head>
+
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
         <!-- Primary Meta Tags -->
         <title>{% block title %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="x-apple-disable-message-reformatting">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible" content="IE=7">
+        <meta http-equiv="Content-Type" content="text/html;charset=windows-1251">
 
         {% for site in meta_neumorphism %}
             <!-- {{ site.description|title }} -->
@@ -41,6 +46,7 @@
         <!-- Pixel CSS -->
         <link type="text/css" href="{% static '/css/neumorphism.css' %}?{% now 'U' %}" rel="stylesheet">
 
+        <!-- Blue Gallery -->
         <link rel="stylesheet" href="{% static 'vendor/blueimp-gallery.min.css' %}?{% now 'U' %}"/>
 
         <!-- Specific Page CSS goes HERE  -->
