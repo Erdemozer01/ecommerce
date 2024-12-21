@@ -12,7 +12,7 @@ from store.models import Product, ProductImage, ProductCategory, ProductComments
     NewsLetter
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import HttpResponse
 from article.models import Posts
 from django.core import mail
 from settings.models import SiteSettingModels
@@ -223,4 +223,4 @@ class ContactAdmin(admin.ModelAdmin):
     model = Contact
     list_display = ['name', 'subject', 'email', 'created']
     search_fields = ['name', 'subject', 'email']
-    search_help_text = "ad, konu ve e-posta ile arama"
+    search_help_text = "ad, konu veya e-posta ile arama"
