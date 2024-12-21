@@ -77,7 +77,7 @@
                     {% endif %}
                 </h3>
 
-                <div class="row">
+                <div class="row g-5 mt-2">
 
                     {% if "makale/etiketler/" in request.get_full_path %}
                         {% if article_tags_list %}
@@ -85,9 +85,10 @@
                                 <div class="col-12 col-md-4 mb-4">
                                     <div class="card bg-primary border-light shadow-soft">
                                         <div class="card-header p-3">
+
                                             {% thumbnail post.cover "1920x1080" crop="center" as im %}
-                                            <img src="{{ im.url }}" class="card-img-top rounded">
-                                        {% endthumbnail %}
+                                                <img src="{{ im.url }}" class="card-img-top rounded">
+                                            {% endthumbnail %}
 
                                         </div>
                                         <div class="card-body pt-2">
@@ -113,16 +114,16 @@
                                             <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
                                                 {% if post.title|length < 24 %}
 
-                                                <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
-                                                    <h3 class="h5 card-title mt-4 mb-5" title="{{ post.title }}"
-                                                        data-toggle="tooltip">{{ post.title }}</h3>
-                                                </a>
-                                            {% elif post.title|length > 24 %}
-                                                <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
-                                                    <h3 class="h5 card-title mt-4" title="{{ post.title }}"
-                                                        data-toggle="tooltip">{{ post.title|truncatechars:50 }}</h3>
-                                                </a>
-                                            {% endif %}
+                                                    <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
+                                                        <h3 class="h5 card-title mt-4 mb-5" title="{{ post.title }}"
+                                                            data-toggle="tooltip">{{ post.title }}</h3>
+                                                    </a>
+                                                {% elif post.title|length > 24 %}
+                                                    <a href="{% url 'article:article_detail' post.pk post.category|slugify post.slug %}">
+                                                        <h3 class="h5 card-title mt-4" title="{{ post.title }}"
+                                                            data-toggle="tooltip">{{ post.title|truncatechars:50 }}</h3>
+                                                    </a>
+                                                {% endif %}
                                             </a>
 
                                             <a href="{% url 'article:article_detail' post.pk post.category.title|slugify post.slug %}"
