@@ -13,7 +13,7 @@ from .forms import UserRegistrationForm, UserEditForm, UserProfileEditForm, User
 from django.contrib.auth.models import User
 from django.conf import settings
 from settings.models import SiteSettingModels
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.forms import PasswordResetForm
 
 class UserRegister(generic.CreateView):
     template_name = "registration/sign-up.html"
@@ -39,10 +39,14 @@ def ProfileUpdateView(request, user):
     user = get_object_or_404(User, username=request.user.username)
     user_form = UserEditForm(request.POST or None, instance=user)
     profile_form = UserProfileEditForm(request.POST or None, instance=profile)
+
+
+    cart_id = request.session.session_key
+    wish_list_products = Product.objects.filter(wish_list__username=request.user)
+    cart_list = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
+        'quantity__sum']
+
     product = Product.objects.all()
-    cart_total_products = \
-        CartItems.objects.filter(cart__cart_id=request.session.session_key).aggregate(Sum('quantity'))[
-            'quantity__sum']
 
     total = 0
 
@@ -64,6 +68,7 @@ def ProfileUpdateView(request, user):
             profile.save()
             profile_form.save()
 
+
         messages.success(request, "Profil başarıyla güncellendi.")
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -72,28 +77,6 @@ def ProfileUpdateView(request, user):
         user_form = UserEditForm(instance=user)
         profile_form = UserProfileEditForm(instance=profile)
 
-    if request.user.is_authenticated:
-
-        wish_list_products = Product.objects.filter(wish_list__username=request.user)
-
-        price = \
-            Product.objects.filter(wish_list__username=request.user, is_discount=False).aggregate(
-                Sum('price'))['price__sum']
-
-        discount_price = \
-            Product.objects.filter(wish_list__username=request.user, is_discount=True).aggregate(
-                Sum('discount_price'))['discount_price__sum']
-
-        if discount_price is not None and price is not None:
-            total = discount_price + price
-        elif discount_price is not None and price is None:
-            total = discount_price
-        elif discount_price is None and price is not None:
-            total = price
-
-        total = round(total, 3)
-
-        product = Product.objects.all()
 
     return render(
         request,
@@ -104,7 +87,7 @@ def ProfileUpdateView(request, user):
             "wish_list_products": wish_list_products,
             "total": total,
             "product": product,
-            "cart_list": cart_total_products,
+            "cart_list": cart_list,
         })
 
 

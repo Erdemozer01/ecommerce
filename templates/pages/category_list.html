@@ -238,7 +238,6 @@
                         {% elif "product-marka" in request.get_full_path %}
                             {% if product_brand_list %}
                                 {% for product in product_brand_list %}
-
                                     <div class="col-12 col-md-4">
                                         <div class="card bg-primary border-light shadow-soft mb-4">
 
@@ -352,17 +351,13 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 {% endfor %}
                             {% else %}
                                 <p class="align-items-lg-center h4 text-danger mx-auto">Ürün Bulunamadı</p>
                             {% endif %}
-
                         {% else %}
-
                             {% if product_category_list %}
                                 {% for product in product_category_list %}
-
                                     <div class="col-12 col-md-4">
                                         <div class="card bg-primary border-light shadow-soft mb-4">
 
@@ -476,14 +471,11 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 {% endfor %}
                             {% else %}
                                 <p class="align-items-lg-center h4 text-danger">Ürün Bulunamadı</p>
                             {% endif %}
-
                         {% endif %}
-
                     </div>
 
                     {% include "include/paginator.html" %}

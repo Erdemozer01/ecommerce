@@ -1,6 +1,7 @@
 {% load static %}
 {% load categories %}
 {% load article_category %}
+{% load cart %}
 {% product_categories_list_for_sidebar_menu_first_level as product_categories_first %}
 {% product_categories_list_for_sidebar_menu_second_level as product_categories_second %}
 {% product_categories_list_for_sidebar_menu_last_level as product_categories_last %}
@@ -8,6 +9,7 @@
 {% article_category_first as article_category_first %}
 {% article_category_second as article_category_second %}
 {% article_category_last as article_category_last %}
+
 
 <!-- Navbar -->
 
@@ -288,7 +290,8 @@
                             <span class="fa fa-user text-info" title="Hoş Geldiniz, {{ request.user }}"
                                   data-toggle="tooltip"></span>
                         {% else %}
-                            <a href="{% url "login" %}" target="_blank" class="btn btn-sm btn-soft" data-toggle="tooltip" title="Giriş yap yada üye ol">
+                            <a href="{% url "login" %}" target="_blank" class="btn btn-sm btn-soft"
+                               data-toggle="tooltip" title="Giriş yap yada üye ol">
                                 <span>Giriş</span>
                                 <small class="fa fa-sm fa-sign-in "></small>
                             </a>
@@ -329,16 +332,13 @@
 
                         <a href="{% url 'store:my_cart_list' request.user.username request.session.session_key %}"
                            class="nav-link">
-                            {% if cart_total_products is None %}
-                                <span class="fas fa-shopping-cart text-warning" title="Ürün sepetiniz boş"
-                                      data-toggle="tooltip"></span>
-                                <span class="badge badge-info">0</span>
+                            <span class="fas fa-shopping-cart text-warning" title="Ürün sepeti"
+                                  data-toggle="tooltip"></span>
+                            {% if cart_list %}
+                                <span class="badge badge-info">{{ cart_list }}</span>
                             {% else %}
-                                <span class="fas fa-shopping-cart text-warning" title="Ürün sepeti"
-                                      data-toggle="tooltip"></span>
-                                <span class="badge badge-info">{{ cart_total_products }}</span>
+                                <span class="badge badge-info">0</span>
                             {% endif %}
-
                         </a>
                     </li>
                 </ul>
@@ -346,42 +346,12 @@
                 <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2">
                     <li class="nav-item dropdown">
 
-                        <a href="#" class="nav-link" data-toggle="dropdown">
+                        <a href="{% url 'store:my_wish_list' request.user %}" class="nav-link">
                             <span class="fas fa-heart text-danger" title="İstek Listesi" data-toggle="tooltip"></span>
                             <span class="badge badge-info">{{ wish_list_products.count }}</span>
                         </a>
 
-                        {% if wish_list_products is None %}
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a class="dropdown-item" href="#">İstek listeniz boş.</a>
-                                </li>
-                            </ul>
-                        {% else %}
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                {% for wish in wish_list_products %}
-                                    <li>
-                                        {% if wish.discount_price %}
-                                            <a class="dropdown-item"
-                                               href="{% url "store:product_detail" wish.pk wish.brand|slugify wish.slug %}">
-                                                {{ wish.title|truncatechars:25 }}
-                                                <p class="font-weight-bold">Fiyat : {{ wish.discount_price }} TL </p>
-                                            </a>
-                                        {% else %}
-                                            <a class="dropdown-item"
-                                               href="{% url "store:product_detail" wish.pk wish.brand|slugify wish.slug %}">
-                                                {{ wish.title|truncatechars:25 }}
-                                                <p class="font-weight-bold">Fiyat : {{ wish.price }} TL </p>
-                                            </a>
-                                        {% endif %}
 
-                                    </li>
-                                {% endfor %}
-                                <li>
-                                    <a class="dropdown-item" href="#">Toplam : {{ total }}</a>
-                                </li>
-                            </ul>
-                        {% endif %}
                     </li>
                 </ul>
             {% endif %}

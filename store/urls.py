@@ -4,7 +4,7 @@ from .views import (
     SortByLowPriceView, SortByHighPriceView, NewestProductsView, comment_delete, report_comment,
     MostLikesProductsView, BrandCategoryView, add_cart, MyCartView, UpdateMyCart, remove_product_from_cart,
     MostViewedProductsView, checkout_view, PromoCodeView, valid_cart, non_valid_cart, add_non_valid_my_cart,
-    remove_non_valid_my_cart, SubscribeView, unsubscribe, contact
+    remove_non_valid_my_cart, SubscribeView, unsubscribe, contact, WishListView, remove_item_wishlist
 )
 
 app_name = 'store'
@@ -16,7 +16,7 @@ urlpatterns = [
     path('product-marka-kategori/<str:brand>/', BrandCategoryView.as_view(), name='brand_category'),
     path('like/<pk>/', product_likes, name='product_likes'),
     path('dislike/<pk>/', product_dislikes, name='product_dislikes'),
-    path('wish/<pk>/', wish_list, name='wish_list'),
+    path('add-wish-list/<pk>/', wish_list, name='wish_list'),
     path('sırala/düsuk-fiyattan-yüksek-fiyata/', SortByLowPriceView.as_view(), name='sort_low_price'),
     path('sırala/yüksek-fiyattan-düşük-fiyata/', SortByHighPriceView.as_view(), name='sort_high_price'),
     path('sırala/en-çok-begenilen-ürünler/', MostLikesProductsView.as_view(), name='most_likes_products'),
@@ -37,4 +37,6 @@ urlpatterns = [
     path('abone-ol/', SubscribeView, name='abone_ol'),
     path('unsubscribe/<unsubscribe_email>/', unsubscribe, name='unsubscribe'),
     path('iletişim/', contact, name='contact'),
+    path('istek-listem/<user>/', WishListView, name='my_wish_list'),
+    path('istek-listesinden-çıkart/<pk>/', remove_item_wishlist, name='remove_wish_list'),
 ]

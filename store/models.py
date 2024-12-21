@@ -149,6 +149,7 @@ class Cart(models.Model):
         unique=True,
         editable=False,
     )
+
     total = models.FloatField(verbose_name='Toplam:', blank=True, null=True, editable=False, )
     app_promo = models.BooleanField(verbose_name="Promosyon uygulandı ? ", default=False, editable=True, )
     promo = models.CharField(max_length=100, blank=True, verbose_name="Kampanya Kodu")

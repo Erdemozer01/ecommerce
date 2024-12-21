@@ -23,34 +23,13 @@ class ArticleCategoryView(ListView):
             return Posts.objects.filter(category__title__icontains=self.kwargs['category'])
 
     def get_context_data(self, **kwargs):
-        total = 0
-        category = self.kwargs['category']
         context = super(ArticleCategoryView, self).get_context_data(**kwargs)
-        context['category'] = category
+        context['category'] = self.kwargs['category']
         if self.request.user.is_authenticated:
+            cart_id = self.request.session.session_key
             context['wish_list_products'] = Product.objects.filter(wish_list__username=self.request.user)
-
-            price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=False).aggregate(
-                    Sum('price'))[
-                    'price__sum']
-            discount_price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=True).aggregate(
-                    Sum('discount_price'))['discount_price__sum']
-
-            if discount_price is not None and price is not None:
-                total = discount_price + price
-            elif discount_price is not None and price is None:
-                total = discount_price
-            elif discount_price is None and price is not None:
-                total = price
-            context['total'] = round(total, 3)
-
-            context['product'] = Product.objects.all()
-            cart_total_products = \
-                CartItems.objects.filter(cart__cart_id=self.request.session.session_key).aggregate(Sum('quantity'))[
-                    'quantity__sum']
-            context['cart_total_products'] = cart_total_products
+            context['cart_list'] = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
+                'quantity__sum']
         return context
 
 
@@ -69,31 +48,11 @@ class ArticleTagsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleTagsView, self).get_context_data(**kwargs)
-        total = 0
         if self.request.user.is_authenticated:
+            cart_id = self.request.session.session_key
             context['wish_list_products'] = Product.objects.filter(wish_list__username=self.request.user)
-
-            price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=False).aggregate(
-                    Sum('price'))[
-                    'price__sum']
-            discount_price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=True).aggregate(
-                    Sum('discount_price'))['discount_price__sum']
-
-            if discount_price is not None and price is not None:
-                total = discount_price + price
-            elif discount_price is not None and price is None:
-                total = discount_price
-            elif discount_price is None and price is not None:
-                total = price
-            context['total'] = round(total, 3)
-
-            context['product'] = Product.objects.all()
-            cart_total_products = \
-                CartItems.objects.filter(cart__cart_id=self.request.session.session_key).aggregate(Sum('quantity'))[
-                    'quantity__sum']
-            context['cart_total_products'] = cart_total_products
+            context['cart_list'] = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
+                'quantity__sum']
         context['tags'] = self.kwargs['tags']
         return context
 
@@ -113,31 +72,11 @@ class ArticleListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleListView, self).get_context_data(**kwargs)
-        total = 0
         if self.request.user.is_authenticated:
+            cart_id = self.request.session.session_key
             context['wish_list_products'] = Product.objects.filter(wish_list__username=self.request.user)
-
-            price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=False).aggregate(
-                    Sum('price'))[
-                    'price__sum']
-            discount_price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=True).aggregate(
-                    Sum('discount_price'))['discount_price__sum']
-
-            if discount_price is not None and price is not None:
-                total = discount_price + price
-            elif discount_price is not None and price is None:
-                total = discount_price
-            elif discount_price is None and price is not None:
-                total = price
-            context['total'] = round(total, 3)
-
-            context['product'] = Product.objects.all()
-            cart_total_products = \
-                CartItems.objects.filter(cart__cart_id=self.request.session.session_key).aggregate(Sum('quantity'))[
-                    'quantity__sum']
-            context['cart_total_products'] = cart_total_products
+            context['cart_list'] = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
+                'quantity__sum']
         return context
 
 
@@ -161,36 +100,13 @@ class ArticleDetailView(HitCountDetailView, DetailView):
         else:
             return Posts.objects.all()
 
-
-
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        total = 0
-        # Navbar_wish_list
         if self.request.user.is_authenticated:
+            cart_id = self.request.session.session_key
             context['wish_list_products'] = Product.objects.filter(wish_list__username=self.request.user)
-
-            price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=False).aggregate(
-                    Sum('price'))[
-                    'price__sum']
-            discount_price = \
-                Product.objects.filter(wish_list__username=self.request.user, is_discount=True).aggregate(
-                    Sum('discount_price'))['discount_price__sum']
-
-            if discount_price is not None and price is not None:
-                total = discount_price + price
-            elif discount_price is not None and price is None:
-                total = discount_price
-            elif discount_price is None and price is not None:
-                total = price
-            context['total'] = round(total, 3)
-
-            context['product'] = Product.objects.all()
-            cart_total_products = \
-                CartItems.objects.filter(cart__cart_id=self.request.session.session_key).aggregate(Sum('quantity'))[
-                    'quantity__sum']
-            context['cart_total_products'] = cart_total_products
+            context['cart_list'] = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
+                'quantity__sum']
         context['article_images'] = ArticleImages.objects.filter(article=self.object.id)
         context['related_posts'] = Posts.objects.filter(category=self.object.category)[:5]
         context['article_tags'] = self.get_object().article_tags.all()
