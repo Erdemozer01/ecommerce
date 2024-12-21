@@ -284,7 +284,7 @@
         <div class="d-flex align-items-lg-center">
 
             <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2" style="margin-right: -3%;">
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown animate-up-2">
                     <a href="#" class="nav-link" data-toggle="dropdown">
                         {% if request.user.is_authenticated %}
                             <span class="fa fa-user text-info" title="Hoş Geldiniz, {{ request.user }}"
@@ -330,7 +330,7 @@
                     <li class="nav-item">
 
                         <a href="{% url 'store:my_cart_list' request.user.username request.session.session_key %}"
-                           class="nav-link">
+                           class="nav-link animate-up-2">
                             <span class="fas fa-shopping-cart text-warning" title="Ürün sepeti"
                                   data-toggle="tooltip"></span>
                             {% if cart_list %}
@@ -343,7 +343,7 @@
                 </ul>
 
                 <ul class="align-items-lg-center list-unstyled mb-0 mb-lg-0 ml-auto mt-2">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown animate-up-2">
 
                         <a href="{% url 'store:my_wish_list' request.user %}" class="nav-link">
                             <span class="fas fa-heart text-danger" title="İstek Listesi" data-toggle="tooltip"></span>
