@@ -966,9 +966,7 @@ def contact(request):
 
                 messages.error(request, f"{str(e)}")
 
-
-            messages.success(request, "Mesajınız gönderildi")
-            instance.save()
+            messages.success(request, "Mesajınız gönderildi. En kısa sürede email adrenize cevap yazacağız.")
 
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
