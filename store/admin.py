@@ -44,6 +44,7 @@ class ProductAdmin(admin.ModelAdmin):
         'category',
         'title',
         'price',
+        'money_symbol',
         'discount_price',
         'stock',
         'sale_count',
@@ -182,20 +183,11 @@ class NewsLetterAdmin(admin.ModelAdmin):
         for subscriber in Subscribe.objects.all():
 
             try:
-                if obj.is_discount:
-                    product_list = Product.objects.order_by('-updated')[:10]
-                else:
-                    product_list = None
 
-                if obj.is_article:
-                    article_list = Posts.objects.order_by('-created')[:10]
-                else:
-                    article_list = None
 
                 template_name = os.path.join(settings.BASE_DIR, "templates", "pages", "news.html")
                 template = get_template(template_name)
-                context = {"product_list": product_list, 'obj': obj, 'unsubscribe_email': subscriber.email,
-                           'article_list': article_list, 'neumorphism_site': neumorphism_site}
+                context = {'obj': obj, 'unsubscribe_email': subscriber.email, 'neumorphism_site': neumorphism_site}
                 html_content = template.render(context)
                 body = HttpResponse(html_content).content.decode("utf-8")
                 msg = EmailMultiAlternatives(

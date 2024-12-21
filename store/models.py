@@ -33,8 +33,8 @@ class Product(models.Model):
         NO_STOCK = 'SY', 'Satıştan Kaldırıldı'
         IN_STOCK = 'SV', 'Satışta'
 
-    category = models.ForeignKey(ProductCategory, verbose_name=_("category"), related_name='product_category',
-                                 on_delete=models.CASCADE, help_text=_("This is the help text"))
+    category = models.ForeignKey(ProductCategory, verbose_name="Kategori", related_name='product_category',
+                                 on_delete=models.CASCADE)
     product_code = models.CharField(default=f"8694436{str(uuid.uuid4().int)[0:5]}", editable=False,
                                     verbose_name=_('product code'),
                                     max_length=1000)
@@ -46,7 +46,7 @@ class Product(models.Model):
     slug = AutoSlugField(populate_from="title", unique=True)
     hit_count = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation')
     price = models.FloatField(verbose_name='Fiyat', help_text="Not: Vergi dahil fiyatı giriniz")
-    money_symbol = models.CharField(verbose_name="Para birimi", max_length=100, blank=True, null=True, help_text="TL, $, ")
+    money_symbol = models.CharField(verbose_name="Para birimi", max_length=100, default="TL", help_text="TL, $, vs...")
     discount = models.PositiveSmallIntegerField(default=None, verbose_name="İndirim(%) ",
                                                 help_text="Yüzde indirimi girin. 10 girdiğinizde fiyata yüzde 10 indirim uygulanacaktır.",
                                                 blank=True, null=True, )
@@ -81,6 +81,7 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.label
+
 
     class Meta:
         db_table = 'product'
