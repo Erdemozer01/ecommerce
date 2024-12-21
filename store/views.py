@@ -1,9 +1,13 @@
+import os
 from datetime import datetime
+from smtplib import SMTPAuthenticationError
+
+from django.template.loader import get_template
 
 from settings.models import SiteSettingModels
 from django.contrib import messages
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.conf import settings
@@ -16,7 +20,8 @@ from hitcount.views import HitCountDetailView
 from accounts.forms import CheckOutForm
 from .forms import PromoCodeForm, ContactForm
 from django.utils.timezone import now
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+
 
 class ProductCategoryView(ListView):
     template_name = "pages/category_list.html"
@@ -936,13 +941,32 @@ def contact(request):
         if form.is_valid():
             instance = form.save(commit=False)
             try:
-                from_email = settings.EMAIL_HOST_USER
-                to_email = settings.EMAIL_HOST_USER
-                subject = instance.subject
-                message = instance.message
-                send_mail(subject, message, from_email, to_email, fail_silently=False)
-            except:
-                pass
+
+
+                template_name = os.path.join(settings.BASE_DIR, "templates", 'pages', "contact_email.html")
+                template = get_template(template_name)
+                context = {"subject": instance.subject, 'name': instance.name, 'email': instance.email,
+                           'message': instance.message,}
+                html_content = template.render(context)
+                body = HttpResponse(html_content).content.decode("utf-8")
+                msg = EmailMultiAlternatives(
+                    subject='Kullanıcı iletişim için yazdı',
+                    body=body,
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=[settings.EMAIL_HOST_USER],
+                )
+                msg.content_subtype = "html"
+                msg.send()
+
+            except SMTPAuthenticationError as smtp_error:  # Özel olarak SMTPAuthenticationError için
+
+                messages.error(request, f"Giriş yetkilendirme hatası: {smtp_error}")
+
+            except Exception as e:
+
+                messages.error(request, f"{str(e)}")
+
+
             messages.success(request, "Mesajınız gönderildi")
             instance.save()
 
