@@ -154,7 +154,6 @@ class Cart(models.Model):
     customer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='carts', verbose_name="Müşteri:",
                                  editable=False, )
     cart_id = models.CharField(
-        default=uuid.uuid4().int,
         max_length=500,
         verbose_name='Sepet İD',
         primary_key=False,
@@ -176,6 +175,14 @@ class Cart(models.Model):
     class Meta:
         verbose_name = 'Sepet'
         verbose_name_plural = "Sepetim"
+
+    def save(self, *args, **kwargs):
+        try:
+            self.cart_id = uuid.uuid4().int
+        except:
+            self.cart_id = uuid.uuid4().int
+
+        return super().save(*args, **kwargs)
 
 
 class CartItems(models.Model):
