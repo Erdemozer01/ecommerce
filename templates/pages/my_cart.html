@@ -52,8 +52,13 @@
 
                     <div class="pb-3 mb-2">
                         <div class="pb-2 border-bottom mt-4" style="margin-right: -10px">
-                            <span class="h4">Sepetim <i
-                                    class="badge badge-info badge-md h2">{{ cart_total_products }}</i></span>
+                            {% if my_cart_list %}
+                                <span class="h4">Sepetim
+                                    <i class="badge badge-info badge-md h2">{{ cart_total_products }}</i>
+                            </span>
+                            {% else %}
+                                <span class="h4">Sepetim</span>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -105,77 +110,83 @@
 
                             </table>
                         {% else %}
-                            <table class="table table-responsive shadow-soft rounded">
-                                <tr>
-                                    <th class="border-0" scope="col" id="class">Ürün Kodu</th>
-                                    <th class="border-0" scope="col" id="teacher">Ürün</th>
-                                    <th class="border-0" scope="col" id="teacher">Birim Fiyat</th>
-                                    <th class="border-0" scope="col" id="males">Adet</th>
-                                    <th class="border-0" scope="col" id="females">Tutar</th>
-                                    <th class="border-0" scope="col" id="females">İşlem</th>
-                                </tr>
-                                {% if my_cart_list %}
-                                    {% for my_cart in my_cart_list %}
-                                        <tr>
-                                            <td>{{ my_cart.product.product_code }}</td>
-                                            <th>
-                                                <a href="{% url "store:product_detail" my_cart.product.pk my_cart.product.brand|slugify my_cart.product.slug %}"
-                                                   title="Ürüne git" data-toggle="tooltip">
-                                                    {{ my_cart.product.title }}
-                                                </a>
-                                            </th>
-                                        
-                                            {% if my_cart.product.discount %}
-                                                <td>{{ my_cart.product.discount_price }}</td>
-                                            {% else %}
-                                                <td>{{ my_cart.product.price }}</td>
-                                            {% endif %}
+                            {% if my_cart_list %}
+                                <table class="table table-responsive shadow-soft rounded">
+                                    <tr>
+                                        <th class="border-0" scope="col" id="class">Ürün Kodu</th>
+                                        <th class="border-0" scope="col" id="teacher">Ürün</th>
+                                        <th class="border-0" scope="col" id="teacher">Birim Fiyat</th>
+                                        <th class="border-0" scope="col" id="males">Adet</th>
+                                        <th class="border-0" scope="col" id="females">Tutar</th>
+                                        <th class="border-0" scope="col" id="females">İşlem</th>
+                                    </tr>
+                                    {% if my_cart_list %}
+                                        {% for my_cart in my_cart_list %}
+                                            <tr>
+                                                <td>{{ my_cart.product.product_code }}</td>
+                                                <th>
+                                                    <a href="{% url "store:product_detail" my_cart.product.pk my_cart.product.brand|slugify my_cart.product.slug %}"
+                                                       title="Ürüne git" data-toggle="tooltip">
+                                                        {{ my_cart.product.title }}
+                                                    </a>
+                                                </th>
 
-                                            <td class="table-responsive">{{ my_cart.quantity }}</td>
-                                        
-                                            <td>{{ my_cart.items_total }}</td>
-                                        
-                                            <td>
-                                                <a href="{% url "store:add_non_valid_my_cart" my_cart.product.pk cart_id %}"
-                                                   style="margin-left: -9%">
-                                                    <button class="btn btn-primary btn-sm ml-2" title="Ekle"
-                                                            data-toggle="tooltip">
-                                                        <i class="fa fa-arrow-up text-success animate-up-3"></i>
-                                                    </button>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a href="{% url "store:remove_non_valid_my_cart" my_cart.product.pk cart_id %}">
-                                                    <button class="btn btn-primary btn-sm " title="Çıkart"
-                                                            data-toggle="tooltip">
-                                                        <i class="fa fa-arrow-down text-danger animate-down-3"
-                                                           title="Çıkart"></i>
-                                                    </button>
-                                                </a>
-                                            </td>
-                                        
-                                            <td>
-                                                <a href="{% url "store:remove_product_from_cart" my_cart.product.pk %}">
-                                                    <button class="btn btn-primary btn-sm ml-2" title="Sepetten Çıkar"
-                                                            data-toggle="tooltip">
-                                                        <i class="fa fa-trash text-danger"></i>
-                                                    </button>
-                                                </a>
-                                            </td>
+                                                {% if my_cart.product.discount %}
+                                                    <td>{{ my_cart.product.discount_price }}</td>
+                                                {% else %}
+                                                    <td>{{ my_cart.product.price }}</td>
+                                                {% endif %}
 
-                                        <tr>
-                                    {% endfor %}
+                                                <td class="table-responsive">{{ my_cart.quantity }}</td>
 
-                                {% endif %}
+                                                <td>{{ my_cart.items_total }}</td>
 
-                                <tr class="font-weight-bold">
-                                    <td>Toplam:</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{ cart_total_products }}</td>
-                                    <td><p class="badge badge-soft text-info">{{ cart_total_price }} TL</p></td>
-                                </tr>
-                            </table>
+                                                <td>
+                                                    <a href="{% url "store:add_non_valid_my_cart" my_cart.product.pk cart_id %}"
+                                                       style="margin-left: -9%">
+                                                        <button class="btn btn-primary btn-sm ml-2" title="Ekle"
+                                                                data-toggle="tooltip">
+                                                            <i class="fa fa-arrow-up text-success animate-up-3"></i>
+                                                        </button>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url "store:remove_non_valid_my_cart" my_cart.product.pk cart_id %}">
+                                                        <button class="btn btn-primary btn-sm " title="Çıkart"
+                                                                data-toggle="tooltip">
+                                                            <i class="fa fa-arrow-down text-danger animate-down-3"
+                                                               title="Çıkart"></i>
+                                                        </button>
+                                                    </a>
+                                                </td>
+
+                                                <td>
+                                                    <a href="{% url "store:remove_product_from_cart" my_cart.product.pk %}">
+                                                        <button class="btn btn-primary btn-sm ml-2"
+                                                                title="Sepetten Çıkar"
+                                                                data-toggle="tooltip">
+                                                            <i class="fa fa-trash text-danger"></i>
+                                                        </button>
+                                                    </a>
+                                                </td>
+
+                                            <tr>
+                                        {% endfor %}
+
+                                    {% endif %}
+
+                                    <tr class="font-weight-bold">
+                                        <td>Toplam:</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ cart_total_products }}</td>
+                                        <td><p class="badge badge-soft text-info">{{ cart_total_price }} TL</p></td>
+                                    </tr>
+                                </table>
+                            {% else %}
+                                <p class="mx-auto text-danger h4">Sepet Boş</p>
+                            {% endif %}
+
                         {% endif %}
                     </div>
 
@@ -192,12 +203,14 @@
                             </button>
                         </a>
                     {% else %}
-                        <form action="{% url "store:valid_my_cart" cart_id %}">
-                            <button class="btn btn-primary" style="float: right; margin-right: -10px" type="submit">
-                                <i class="fa fa-thumbs-up text-success mr-2"></i>Sepeti
-                                onayla
-                            </button>
-                        </form>
+                        {% if my_cart_list %}
+                            <form action="{% url "store:valid_my_cart" cart_id %}">
+                                <button class="btn btn-primary" style="float: right; margin-right: -10px" type="submit">
+                                    <i class="fa fa-thumbs-up text-success mr-2"></i>Sepeti
+                                    onayla
+                                </button>
+                            </form>
+                        {% endif %}
                     {% endif %}
 
                 </div>

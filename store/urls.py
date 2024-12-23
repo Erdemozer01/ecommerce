@@ -4,7 +4,7 @@ from .views import (
     SortByLowPriceView, SortByHighPriceView, NewestProductsView, comment_delete, report_comment,
     MostLikesProductsView, BrandCategoryView, add_cart, MyCartView, UpdateMyCart, remove_product_from_cart,
     MostViewedProductsView, checkout_view, PromoCodeView, valid_cart, non_valid_cart, add_non_valid_my_cart,
-    remove_non_valid_my_cart, SubscribeView, unsubscribe, contact, WishListView, remove_item_wishlist
+    remove_non_valid_my_cart, SubscribeView, unsubscribe, contact, WishListView, remove_item_wishlist, DiscountProductsView
 )
 
 app_name = 'store'
@@ -22,6 +22,7 @@ urlpatterns = [
     path('sırala/en-çok-begenilen-ürünler/', MostLikesProductsView.as_view(), name='most_likes_products'),
     path('sırala/yeni-gelenden-eskiye/', NewestProductsView.as_view(), name='newest_products'),
     path('sırala/most-viewed-products/', MostViewedProductsView.as_view(), name='most_viewed_products'),
+    path('sırala/indirimli-ürünler/', DiscountProductsView.as_view(), name='dicount_products'),
     path('comment-delete/<pk>/', comment_delete, name='comment_delete'),
     path('report/<pk>/', report_comment, name='report_comment'),
     path('add-cart/<pk>/<cart_id>/', add_cart, name='add_cart'),

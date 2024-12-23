@@ -1,7 +1,9 @@
+import decimal
 import os
 from datetime import datetime
 from smtplib import SMTPAuthenticationError
 
+from django.db.models.aggregates import Max
 from django.template.loader import get_template
 
 from settings.models import SiteSettingModels
@@ -11,10 +13,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.conf import settings
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Max
 
 from accounts.models import Profile
-from .models import Product, ProductComments, Cart, PromoCodeModel, CartItems, Subscribe, Contact
+from .models import Product, ProductComments, Cart, PromoCodeModel, CartItems, Subscribe, Alert
 from django.db.models import Q
 from hitcount.views import HitCountDetailView
 from accounts.forms import CheckOutForm
@@ -93,10 +95,9 @@ class StoreListView(ListView):
     template_name = "pages/store_list.html"
     model = Product
     context_object_name = "product_list"
-    paginate_by = 9
+    paginate_by = 36
 
     def get(self, request, *args, **kwargs):
-        print(self.request.get_host())
         try:
             for promo in PromoCodeModel.objects.all():
                 if promo.promo_end_date < now():
@@ -107,15 +108,29 @@ class StoreListView(ListView):
 
     def get_queryset(self):
         search = self.request.GET.get('search', False)
+
+        min_price = self.request.GET.get('en_dusuk', False)
+        max_price = self.request.GET.get('en_yuksek', False)
+
         object_list = Product.objects.all()
+
         if search:
+
             object_list = object_list.filter(Q(title__icontains=search) | Q(category__title__icontains=search) | Q(
                 brand__icontains=search))
+
             if object_list.exists():
                 messages.add_message(self.request, messages.SUCCESS, f'{object_list.count()} Ürün Bulundu.')
             else:
                 messages.add_message(self.request, messages.ERROR, 'Aradığınız Ürün Bulunamadı')
             return object_list
+
+        if min_price or max_price:
+
+            if not max_price:
+                max_price = object_list.aggregate(Max('price'))['price__max']
+
+            object_list = object_list.filter(Q(price__lte=float(max_price)) & Q(price__gte=float(min_price)))
 
         return object_list
 
@@ -127,6 +142,8 @@ class StoreListView(ListView):
             context['wish_list_products'] = Product.objects.filter(wish_list__username=self.request.user)
             context['cart_list'] = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
                 'quantity__sum']
+
+        context['alert_list'] = Alert.objects.filter(is_publish=True)
 
         return context
 
@@ -176,7 +193,7 @@ class SortByLowPriceView(ListView):
     template_name = "pages/store_list.html"
     model = Product
     context_object_name = "product_list"
-    paginate_by = 9
+    paginate_by = 36
 
     def get_queryset(self):
         search = self.request.GET.get('search', False)
@@ -215,7 +232,7 @@ class SortByHighPriceView(ListView):
     template_name = "pages/store_list.html"
     model = Product
     context_object_name = "product_list"
-    paginate_by = 9
+    paginate_by = 36
 
     def get_queryset(self):
         search = self.request.GET.get('search', False)
@@ -247,7 +264,7 @@ class NewestProductsView(ListView):
     template_name = "pages/store_list.html"
     model = Product
     context_object_name = "product_list"
-    paginate_by = 9
+    paginate_by = 36
     ordering = ['-created']
 
     def get_queryset(self):
@@ -273,7 +290,7 @@ class MostLikesProductsView(ListView):
     template_name = "pages/store_list.html"
     model = Product
     context_object_name = "product_list"
-    paginate_by = 9
+    paginate_by = 36
 
     def get_queryset(self):
         search = self.request.GET.get('search', False)
@@ -298,21 +315,50 @@ class MostViewedProductsView(ListView):
     template_name = "pages/store_list.html"
     model = Product
     context_object_name = "product_list"
-    paginate_by = 9
+    paginate_by = 36
 
     def get_queryset(self):
         search = self.request.GET.get('search', False)
+        object_list = Product.objects.order_by('-hit_count__hits')
         if search:
-            object_list = Product.objects.filter(Q(title__icontains=search) | Q(category__title__icontains=search),
-                                                 Q(brand__icontains=search)).order_by(
+            object_list = object_list.filter(Q(title__icontains=search) | Q(category__title__icontains=search) |
+                                             Q(brand__icontains=search)).order_by(
                 '-hit_count__hits')
             messages.add_message(self.request, messages.SUCCESS, f'{object_list.count()} Ürün Bulundu.')
-            return object_list
-        else:
-            return self.model.objects.order_by('-hit_count__hits')
+
+        return object_list
 
     def get_context_data(self, **kwargs):
         context = super(MostViewedProductsView, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            cart_id = self.request.session.session_key
+            context['wish_list_products'] = Product.objects.filter(wish_list__username=self.request.user)
+            context['cart_list'] = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
+                'quantity__sum']
+        return context
+
+
+class DiscountProductsView(ListView):
+    template_name = "pages/store_list.html"
+    model = Product
+    context_object_name = "product_list"
+    paginate_by = 36
+
+    def get_queryset(self):
+        search = self.request.GET.get('search', False)
+
+        object_list = Product.objects.filter(is_discount=True)
+
+        if search:
+            object_list = object_list.filter(Q(title__icontains=search) | Q(category__title__icontains=search) |
+                                             Q(brand__icontains=search))
+
+            messages.add_message(self.request, messages.SUCCESS, f'{object_list.count()} Ürün Bulundu.')
+
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(DiscountProductsView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             cart_id = self.request.session.session_key
             context['wish_list_products'] = Product.objects.filter(wish_list__username=self.request.user)
@@ -418,9 +464,9 @@ def add_cart(request, pk, cart_id):
         return redirect('%s?next=/magaza/products/' % settings.LOGIN_URL)
 
     else:
-
         product = Product.objects.get(pk=pk)
         customer = Profile.objects.get(user=request.user)
+
         if product.stock == 0:
             messages.info(request, "Ürün stoklarda kalmamıştır.")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -435,9 +481,9 @@ def add_cart(request, pk, cart_id):
             cart_item.quantity += 1
 
             if product.is_discount:
-                cart_item.items_total = round(cart_item.quantity * cart_item.product.discount_price, 5)
+                cart_item.items_total = round(cart_item.quantity * cart_item.product.discount_price, 2)
             else:
-                cart_item.items_total = round(cart_item.quantity * cart_item.product.price, 5)
+                cart_item.items_total = round(cart_item.quantity * cart_item.product.price, 2)
             cart_item.save()
 
         except CartItems.MultipleObjectsReturned:
@@ -471,6 +517,7 @@ def add_cart(request, pk, cart_id):
 
 
 def MyCartView(request, user, cart_id):
+    cart_total_price = 0
     total = 0
     if request.user.is_anonymous:
         messages.error(request, "Lütfen giriş yapınız")
@@ -480,27 +527,24 @@ def MyCartView(request, user, cart_id):
     valid_cart_list = CartItems.objects.filter(cart__cart_id=cart_id, is_valid=True)
     cart_total_products = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))['quantity__sum']
     wish_list_products = Product.objects.filter(wish_list__username=request.user)
-
-    if my_cart_list.count() == 0:
-        messages.info(request, "Sepetiniz Boş")
-        return redirect("store:store_home")
+    cart = Cart.objects.get(cart_id=cart_id)
 
     for items in my_cart_list:
         if items.product.is_discount:
-            items.items_total = round(items.quantity * items.product.discount_price, 4)
+            items.items_total = items.quantity * items.product.discount_price
         else:
-            items.items_total = round(items.quantity * items.product.price, 4)
+            items.items_total = items.quantity * items.product.price
         items.save()
 
-    cart_total_price = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('items_total'))['items_total__sum']
+    if my_cart_list.count() != 0:
+        cart_total_price = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('items_total'))[
+            'items_total__sum']
+        cart.total = round(cart_total_price, 1)
+        cart.save()
 
     if request.user.is_authenticated:
         cart_list = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))[
             'quantity__sum']
-
-    cart = Cart.objects.get(cart_id=cart_id)
-    cart.total = cart_total_price
-    cart.save()
 
     if cart.app_promo is True:
         cart.app_promo = False
@@ -531,8 +575,6 @@ def WishListView(request, user):
 
     elif wish_list_products.filter(is_discount=True):
         dis_total = wish_list.aggregate(Sum('discount_price'))['discount_price__sum']
-
-
 
     return render(request, "pages/wish_list.html", {'wish_list': wish_list, 'total': total, "cart_list": cart_list,
                                                     "wish_list_products": wish_list_products, 'dis_total': dis_total})
@@ -590,27 +632,33 @@ def non_valid_cart(request, cart_id):
 def add_non_valid_my_cart(request, pk, cart_id):
     cart = CartItems.objects.get(cart__cart_id=cart_id, product__pk=pk, is_valid=False)
     cart.quantity += 1
+    if cart.product.stock < cart.quantity:
+        messages.error(request, "Ürün stokta kalmamıştır.")
+        cart.quantity = cart.product.stock
     if cart.product.is_discount:
         cart.items_total = round(cart.quantity * cart.product.discount_price, 3)
     else:
         cart.items_total = round(cart.quantity * cart.product.price, 3)
+    if cart.quantity <= 0:
+        cart.quantity = 1
+
     cart.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def remove_non_valid_my_cart(request, pk, cart_id):
     cart = CartItems.objects.get(cart__cart_id=cart_id, product__pk=pk, is_valid=False)
-    if 0 == cart.quantity <= 1:
-        cart.quantity += 1
-        cart.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if cart.quantity <= 1:
+        cart.quantity = 1
+
     else:
         cart.quantity -= 1
-        if cart.product.is_discount:
-            cart.items_total = round(cart.quantity * cart.product.discount_price, 3)
-        else:
-            cart.items_total = round(cart.quantity * cart.product.price, 3)
-        cart.save()
+
+    if cart.product.is_discount:
+        cart.items_total = round(cart.quantity * cart.product.discount_price, 3)
+    else:
+        cart.items_total = round(cart.quantity * cart.product.price, 3)
+    cart.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

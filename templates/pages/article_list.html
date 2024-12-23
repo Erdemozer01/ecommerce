@@ -43,7 +43,7 @@
                         <div class="input-group justify-content-lg-start" style="margin-top: 4%;">
                             {% if "makale" in request.path %}
                                 <input class="form-control" id="exampleInputIcon2"
-                                       placeholder="Makale başlığı yada kategorisine göre ara"
+                                       placeholder="Başlık yada Kategori"
                                        aria-label="Input group"
                                        type="text" name="search" value="{{ request.GET.search }}">
                             {% elif "magaza" or "/product-kategori" or '' in request.get_absolute_url %}
@@ -68,7 +68,7 @@
                 <div class="col-md-12 mb-5 mb-md-0">
                     <div class="row">
                         <div class="col-md-12">
-                            <header class="d-flex align-items-center pb-3 mb-4 border-bottom">
+                            <header class="d-flex align-items-center pb-2 mb-3 border-bottom">
                                 <span class="fs-4 h5 font-weight-bold">Makeleler</span>
                             </header>
                         </div>
@@ -77,6 +77,7 @@
 
                                 <div class="col-12 col-md-4 mb-4">
                                     <div class="card bg-primary border-light shadow-soft">
+
                                         <div class="links">
                                             <div class="card-header p-3">
                                                 {% thumbnail post.cover "1920x1080" crop="center" as im %}

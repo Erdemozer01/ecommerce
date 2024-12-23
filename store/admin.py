@@ -13,7 +13,7 @@ from store.models import Product, ProductImage, ProductCategory, ProductComments
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.shortcuts import HttpResponse
-from article.models import Posts
+from .models import Alert
 from django.core import mail
 from settings.models import SiteSettingModels
 
@@ -184,7 +184,6 @@ class NewsLetterAdmin(admin.ModelAdmin):
 
             try:
 
-
                 template_name = os.path.join(settings.BASE_DIR, "templates", "pages", "news.html")
                 template = get_template(template_name)
                 context = {'obj': obj, 'unsubscribe_email': subscriber.email, 'neumorphism_site': neumorphism_site}
@@ -224,3 +223,10 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ['name', 'subject', 'email', 'created']
     search_fields = ['name', 'subject', 'email']
     search_help_text = "ad, konu veya e-posta ile arama"
+
+
+@admin.register(Alert)
+class AlertAdmin(admin.ModelAdmin):
+    list_display = ['title', 'type', 'icon', 'is_publish', 'created']
+    list_filter = ['created']
+    list_editable = ('is_publish', 'type', 'icon')

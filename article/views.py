@@ -1,8 +1,9 @@
+from dash.html import Article
 from django.shortcuts import redirect, HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from django.conf import settings
 from django.contrib import messages
-from article.models import Posts, ArticleImages, ArticleTags
+from article.models import Posts, ArticleImages
 from django.db.models import Q
 from store.models import Product, CartItems
 from django.db.models import Sum
@@ -110,6 +111,7 @@ class ArticleDetailView(HitCountDetailView, DetailView):
         context['article_images'] = ArticleImages.objects.filter(article=self.object.id)
         context['related_posts'] = Posts.objects.filter(category=self.object.category)[:5]
         context['article_tags'] = self.get_object().article_tags.all()
+
         return context
 
 
@@ -160,5 +162,3 @@ def post_dislikes(request, pk):
         post.dislikes.add(request.user)
         messages.add_message(request, messages.ERROR, f"{post.title} ürünü beğenmediniz")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-

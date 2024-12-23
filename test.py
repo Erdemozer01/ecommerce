@@ -1,4 +1,7 @@
 
+keywords = "suriyenin-yeni-dsisleri-bakan-esaad-hasan-seybani".rsplit('-', )
+
+print(",".join(str(x) for x in keywords))
 
 
-print(len("The other day the grass was brown,now it’s green because I ain’t give up.Never surrender"))
+print(len("This alert needs your attention, but it's not super important."))

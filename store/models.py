@@ -7,6 +7,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 import uuid
 from django.utils.translation import gettext_lazy as _
 
+
 class ProductCategory(models.Model):
     title = models.CharField(max_length=100, verbose_name='Kategori:', unique=True)
     slug = AutoSlugField(populate_from='title', unique=True)
@@ -33,13 +34,19 @@ class Product(models.Model):
         NO_STOCK = 'SY', 'Satıştan Kaldırıldı'
         IN_STOCK = 'SV', 'Satışta'
 
+    class Discount(models.TextChoices):
+        PERCENT = 'P', 'Percent'
+        CASH = 'C', 'Cash'
+
     category = models.ForeignKey(ProductCategory, verbose_name="Kategori", related_name='product_category',
                                  on_delete=models.CASCADE)
-    product_code = models.CharField(default=f"8694436{str(uuid.uuid4().int)[0:5]}", editable=False,
-                                    verbose_name=_('product code'),
-                                    max_length=1000)
+
+    product_code = models.CharField(editable=False, verbose_name="Ürün Kodu", max_length=1000)
+
     title = models.CharField(max_length=250, verbose_name=_("Product Title:"), blank=False, unique=True)
-    image = models.ImageField(upload_to=f'product/', verbose_name='Ürün Fotosu:')
+
+    image = models.ImageField(upload_to=f'product/', verbose_name='Ürün Kapak Fotosu:')
+
     brand = models.CharField(max_length=100, verbose_name='Ürün Markası')
 
     text = CKEditor5Field(verbose_name='Ürün Açıklaması', blank=False, config_name='extends')
@@ -47,10 +54,14 @@ class Product(models.Model):
     hit_count = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation')
     price = models.FloatField(verbose_name='Fiyat', help_text="Not: Vergi dahil fiyatı giriniz")
     money_symbol = models.CharField(verbose_name="Para birimi", max_length=100, default="TL", help_text="TL, $, vs...")
+
     discount = models.PositiveSmallIntegerField(default=None, verbose_name="İndirim(%) ",
-                                                help_text="Yüzde indirimi girin. 10 girdiğinizde fiyata yüzde 10 indirim uygulanacaktır.",
+                                                help_text="Yüzde indirimi girin. ÖR: 10 girdiğinizde fiyata yüzde 10 indirim uygulanacaktır.",
                                                 blank=True, null=True, )
+
     discount_price = models.FloatField(verbose_name='İndirimli Fiyat', blank=True, null=True, editable=False, )
+
+    discount_type = models.CharField(max_length=2, choices=Discount.choices, verbose_name='İndirim türü', default='P')
 
     is_discount = models.BooleanField(verbose_name="İndirimli ürün ?", default=False, blank=True, editable=False, )
 
@@ -82,7 +93,6 @@ class Product(models.Model):
     def __unicode__(self):
         return self.label
 
-
     class Meta:
         db_table = 'product'
         ordering = ['created']
@@ -94,8 +104,9 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if self.discount:
-            discount = self.price * (self.discount / 100)
-            self.discount_price = round(self.price - discount, 3)
+            discount = round(self.price * (self.discount / 100), 2)
+            self.discount_price = int(round(self.price - discount, 2))
+            self.product_code = f"8694436{str(uuid.uuid4().int)[0:5]}"
             self.is_discount = True
 
         else:
@@ -267,3 +278,36 @@ class Subscribe(models.Model):
         verbose_name = "Abonelik"
         verbose_name_plural = "Abonelikler"
         db_table = "subscribe"
+
+
+class Alert(models.Model):
+    class AlertType(models.TextChoices):
+        INFO = 'info', 'Mavi'
+        DANGER = 'danger', 'Kırmızı'
+        SUCCESS = 'success', 'Yeşil'
+        FACEBOOK = 'facebook', 'Facebook'
+        DRIBBLE = 'dribbble', 'Pembe'
+
+    class IconType(models.TextChoices):
+        BELL = 'bell', 'Çan'
+        Exclamation = 'exclamation-circle', 'Ünlem'
+        Thumbs = 'thumbs-up', 'Okey'
+        ThumbsDown = 'thumbs-down', 'Onaylamıyorum'
+        Fire = 'fire', 'Alev'
+
+    type = models.CharField(max_length=50, verbose_name="Tema", choices=AlertType.choices)
+    icon = models.CharField(max_length=50, verbose_name="İşaret", choices=IconType.choices)
+    title = models.CharField(max_length=20, verbose_name="Konu",
+                             help_text="Konu max 20 karekter ve kısa sekilde olmalıdır.")
+    content = models.CharField(verbose_name="Mesaj", max_length=100)
+    url = models.URLField(verbose_name='Ayrıntılar için tıklayın urlsi', blank=True)
+
+    is_publish = models.BooleanField(default=False, verbose_name="Yayınlansın mı ? ")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Yayınlanma Tarihi")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Anasayfa Duyuru"
+        verbose_name_plural = "Anasayfa Duyuruları"
