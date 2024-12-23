@@ -44,6 +44,5 @@ try.py
 staticfiles
 media/*
 
-!**/migrations/__init__.py
-**/migrations/0001_initial.py
+
 
