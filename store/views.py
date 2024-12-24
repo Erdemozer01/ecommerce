@@ -528,7 +528,7 @@ def MyCartView(request, user, cart_id):
     valid_cart_list = CartItems.objects.filter(cart__cart_id=cart_id, is_valid=True)
     cart_total_products = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))['quantity__sum']
     wish_list_products = Product.objects.filter(wish_list__username=request.user)
-    customer = Profile.objects.get(user=user)
+    customer = Profile.objects.get(user__username=user)
 
     try:
         cart = Cart.objects.get(cart_id=cart_id, customer=customer)
