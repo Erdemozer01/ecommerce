@@ -22,60 +22,11 @@
 
             <div class="col-lg-12 col-xl-12">
                 <h1 class="display-2 mb-2">
-
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if message.tags == 'error' %}
-                                <div class="alert alert-danger alert-dismissible shadow-soft fade show"
-                                     role="alert">
-                            {% else %}
-                                <div class="alert alert-{{ message.tags }} alert-dismissible shadow-soft fade show"
-                                     role="alert">
-                            {% endif %}
-
-                        <span class="alert-inner--icon">
-                                        {% if message.tags == 'error' %}
-                                            <span class="far fa-thumbs-down"></span>
-                                        {% elif message.tags == 'success' %}
-                                            <span class="far fa-thumbs-up"></span>
-                                        {% else %}
-
-                                        {% endif %}
-                                    </span>
-
-                        <span class="alert-inner--text"><strong>{{ message }}</strong> </span>
-
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-
-                    <form method="get">
-                        <div class="input-group justify-content-lg-start" style="margin-top: 4%;">
-                            {% if "makale" in request.path %}
-                                <input class="form-control" id="exampleInputIcon2"
-                                       placeholder="Makale kategorisi yada Başlık"
-                                       aria-label="Input group"
-                                       type="text" name="search" value="{{ request.GET.search }}">
-                            {% elif "magaza" or "/product-kategori" or '' in request.get_absolute_url %}
-                                <input class="form-control" id="exampleInputIcon2"
-                                       placeholder="Kategori, Başlık veya Marka"
-                                       aria-label="Input group"
-                                       type="text" name="search" value="{{ request.GET.search }}">
-                            {% endif %}
-
-                            <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fa fa-search"></i>
-                                    </span>
-                            </div>
-                        </div>
-                    </form>
-
+                    {% include 'include/messages.html' %}
+                    {% include 'include/search.html' %}
                     </div>
                 </h1>
+
             </div>
 
             <div class="row g-5">

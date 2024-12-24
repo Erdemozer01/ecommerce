@@ -3,6 +3,7 @@ from smtplib import SMTPAuthenticationError
 
 from django.contrib import admin
 from django.contrib import messages as messages_info
+from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.utils.timezone import now
 
@@ -16,6 +17,47 @@ from django.shortcuts import HttpResponse
 from .models import Alert
 from django.core import mail
 from settings.models import SiteSettingModels
+from store.models import Cart, CartItems
+
+
+class CartItemsAdmin(admin.TabularInline):
+    model = CartItems
+    extra = 0
+    classes = ['collapse']
+    ordering = ['-created']
+
+    def get_readonly_fields(self, request, obj=...):
+        return ['product_code', 'product', 'quantity', 'product__price', 'product__discount_price', 'items_total',
+                'created']
+
+
+
+@admin.register(Cart)
+class CartItemsAdmin(admin.ModelAdmin):
+    inlines = [CartItemsAdmin]
+    model = CartItems
+    list_display = ['customer', 'cart_id', 'total', 'promo', 'is_ordered', 'app_promo', 'created']
+    list_editable = ['app_promo']
+    readonly_fields = ['total']
+
+
+    def total(self, request, obj):
+        cart_id = request.sesion.sesion_key
+        quantity = self.model.objects.filter(cart_id=cart_id).aggregate(Sum('quantity'))['quantity__sum']
+
+
+        if obj.product.discount:
+            price = self.model.objects.filter(cart_id=cart_id).aggregate(Sum('discount_price'))['discount_price__sum']
+            obj.total = quantity + price
+
+        else:
+            price = self.model.objects.filter(cart_id=cart_id).aggregate(Sum('price'))['price__sum']
+            obj.total = quantity + price
+        obj.save()
+        return obj.total
+
+
+        
 
 
 @admin.register(ProductCategory)
@@ -48,6 +90,7 @@ class ProductAdmin(admin.ModelAdmin):
         'discount_price',
         'stock',
         'sale_count',
+        'discount_type',
         'discount',
         'is_discount',
         'updated',
@@ -56,7 +99,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['category__title', 'title']
     search_help_text = "Kategori ve başlık ile arama"
     list_filter = ['category__title', 'brand', 'is_discount', 'updated', 'created']
-    list_editable = ['discount', 'stock']
+    list_editable = ['discount', 'discount_type', 'stock']
     ordering = ['-created']
     list_per_page = 25
     actions = ['send_product_email']

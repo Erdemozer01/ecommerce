@@ -35,8 +35,8 @@ class Product(models.Model):
         IN_STOCK = 'SV', 'Satışta'
 
     class Discount(models.TextChoices):
-        PERCENT = 'P', 'Percent'
-        CASH = 'C', 'Cash'
+        PERCENT = 'P', 'Yüzde'
+        CASH = 'C', 'Nakit'
 
     category = models.ForeignKey(ProductCategory, verbose_name="Kategori", related_name='product_category',
                                  on_delete=models.CASCADE)
@@ -103,11 +103,19 @@ class Product(models.Model):
         verbose_name_plural = 'Ürünler'
 
     def save(self, *args, **kwargs):
+        self.product_code = f"8694436{str(uuid.uuid4().int)[0:5]}"
+
         if self.discount:
-            discount = round(self.price * (self.discount / 100), 2)
-            self.discount_price = int(round(self.price - discount, 2))
-            self.product_code = f"8694436{str(uuid.uuid4().int)[0:5]}"
-            self.is_discount = True
+            if self.discount_type == "C":
+                self.discount_price = int(self.price - self.discount)
+
+            elif self.discount_type == "P":
+
+                discount = round(self.price * (self.discount / 100), 2)
+
+                self.discount_price = int(round(self.price - discount, 2))
+
+                self.is_discount = True
 
         else:
             self.discount_price = None
@@ -165,6 +173,7 @@ class Cart(models.Model):
     total = models.FloatField(verbose_name='Toplam:', blank=True, null=True, editable=False, )
     app_promo = models.BooleanField(verbose_name="Promosyon uygulandı ? ", default=False, editable=True, )
     promo = models.CharField(max_length=100, blank=True, verbose_name="Kampanya Kodu")
+    is_ordered = models.BooleanField(default=False, verbose_name="Sipariş tamalandı mı ?")
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='Oluşturulma Tarihi')
     updated = models.DateTimeField(auto_now=True, verbose_name='Güncellenme Tarihi')
@@ -175,14 +184,6 @@ class Cart(models.Model):
     class Meta:
         verbose_name = 'Sepet'
         verbose_name_plural = "Sepetim"
-
-    def save(self, *args, **kwargs):
-        try:
-            self.cart_id = uuid.uuid4().int
-        except:
-            self.cart_id = uuid.uuid4().int
-
-        return super().save(*args, **kwargs)
 
 
 class CartItems(models.Model):

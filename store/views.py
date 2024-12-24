@@ -459,6 +459,7 @@ def report_comment(request, pk):
 
 
 def add_cart(request, pk, cart_id):
+
     if request.user.is_anonymous:
         messages.error(request, "Lütfen Giriş Yapınız")
         return redirect('%s?next=/magaza/products/' % settings.LOGIN_URL)
@@ -647,7 +648,13 @@ def add_non_valid_my_cart(request, pk, cart_id):
 
 
 def remove_non_valid_my_cart(request, pk, cart_id):
-    cart = CartItems.objects.get(cart__cart_id=cart_id, product__pk=pk, is_valid=False)
+    try:
+
+        cart = CartItems.objects.get(cart__cart_id=cart_id, product__pk=pk, is_valid=False)
+
+    except CartItems.DoesNotExist:
+        messages.error(request, "Sepet boş")
+        return redirect("store:store_home")
     if cart.quantity <= 1:
         cart.quantity = 1
 
@@ -680,7 +687,8 @@ def checkout_view(request, user, cart_id):
     cart_total_products = my_cart_list.aggregate(Sum('quantity'))['quantity__sum']
     cart_total_price = my_cart_list.aggregate(Sum('items_total'))['items_total__sum']
 
-    discount = round(cart.total - cart_total_price, 3)
+    if cart_total_price:
+        discount = round(cart.total - cart_total_price, 3)
 
     if request.method == "POST":
         if checkout_form.is_valid():

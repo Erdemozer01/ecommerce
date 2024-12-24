@@ -1,17 +1,17 @@
 <form method="get">
-    <div class="input-group mb-2">
-        {% if "makale" in request.path %}
-            <input class="form-control" id="exampleInputIcon2"
-                   placeholder="Kategori veya Başlık" aria-label="Input group"
-                   type="text" name="search" value="{{ request.GET.search }}">
-        {% elif "magaza" or "/product-kategori" or '' in request.get_absolute_url %}
-            <input class="form-control" id="exampleInputIcon2"
-                   placeholder="Kategori, Başlık, Marka" aria-label="Input group"
-                   type="text" name="search" value="{{ request.GET.search }}">
+    <div class="input-group justify-content-lg-start mx-auto"
+         style="-moz-border-radius:20px; -webkit-border-radius:20px; border-radius:20px;">
+        {% if 'makale' in request.path %}
+            <input class="form-control" title="Arama Çubuğu" data-toggle="tooltip"
+                   placeholder="Kategori veya Başlık"
+                   type="text" name="search" value="{{ request.GET.search }}"
+                   style="-moz-border-radius: 20px; -webkit-border-radius: 20px; border-radius: 20px;">
+        {% else %}
+            <input class="form-control" title="Arama Çubuğu" data-toggle="tooltip"
+                   placeholder="Kategori, Başlık veya Marka"
+                   type="text" name="search" value="{{ request.GET.search }}"
+                   style="-moz-border-radius: 20px; -webkit-border-radius: 20px; border-radius: 20px;">
         {% endif %}
 
-        <div class="input-group-append"><span class="input-group-text">
-            <i class="fa fa-search"></i></span>
-        </div>
     </div>
 </form>

@@ -60,29 +60,8 @@
                         </div>
                         {% endfor %}
                     {% endif %}
-                    <form method="get">
-                        <div class="input-group justify-content-lg-start" style="margin-top: 4%;">
-                            {% if "makale" in request.path %}
-                                <input class="form-control" id="exampleInputIcon2"
-                                       placeholder="Makale başlığı yada kategorisine göre ara"
-                                       aria-label="Input group"
-                                       type="text" name="search" value="{{ request.GET.search }}">
-                            {% elif "magaza" or "/product-kategori" or '' in request.get_absolute_url %}
-                                <input class="form-control" id="exampleInputIcon2"
-                                       placeholder="Kategori, Başlık veya Marka"
-                                       aria-label="Input group"
-                                       type="text" name="search" value="{{ request.GET.search }}">
-                            {% endif %}
-
-                            <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fa fa-search"></i>
-                                    </span>
-                            </div>
-                        </div>
-                    </form>
+                    {% include "include/search.html" %}
                     </div>
-
                 </h1>
             </div>
 
@@ -199,7 +178,6 @@
                                                             data-toggle="tooltip"></span>{% get_hit_count for product %}</span>
                                                 </div>
                                             </div>
-
 
 
                                             {% if product.title|length < 24 %}
