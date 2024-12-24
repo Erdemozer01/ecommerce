@@ -531,9 +531,9 @@ def MyCartView(request, user, cart_id):
     customer = Profile.objects.get(user__username=user)
 
     try:
-        cart = Cart.objects.get(cart_id=cart_id, customer=customer)
+        cart = Cart.objects.get(cart_id=cart_id)
     except Cart.DoesNotExist:
-        cart = Cart.objects.create(cart_id=cart_id, customer=customer)
+        cart = Cart.objects.create(cart_id=cart_id)
 
     for items in my_cart_list:
         if items.product.is_discount:
