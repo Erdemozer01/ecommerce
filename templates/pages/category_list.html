@@ -14,6 +14,7 @@
     {% endif %}
 {% endblock %}
 
+
 {% block content %}
 
     <main class="container p-5" style="margin-top: 2%">
@@ -22,8 +23,9 @@
 
             <div class="col-lg-12 col-xl-12">
                 <h1 class="display-2 mb-2">
-                    {% include 'include/messages.html' %}
-                    {% include 'include/search.html' %}
+
+                        {% include 'include/messages.html' %}
+                        {% include 'include/search.html' %}
                     </div>
                 </h1>
 
@@ -46,9 +48,9 @@
                     <div class="row">
 
                         {% if 'makale' in request.get_full_path %}
+
                             {% if article_category_list %}
                                 {% for post in article_category_list %}
-
                                     <div class="col-12 col-md-4 mb-4">
                                         <div class="card bg-primary border-light shadow-soft">
                                             <div class="card-header p-3">
@@ -94,99 +96,26 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 {% endfor %}
-
                             {% else %}
 
                                 {% if 'search' in request.get_full_path %}
 
                                     <div class="col-12 col-md-4 mx-auto">
-
                                         <p class="font-weight-bold text-danger">Arama kriterlerinize uygun makale
                                             bulunamadı.</p>
-
                                     </div>
 
                                 {% else %}
 
-                                    <div class="col-12 col-md-4">
-                                        <div class="card bg-primary border-light shadow-soft">
-                                            <div class="card-header p-3">
-                                                <img src="{% static 'img/blog-article-1.jpg' %}"
-                                                     class="card-img-top rounded"
-                                                     alt="Designer desk">
-                                            </div>
-                                            <div class="card-body pt-2">
-                                                <div class="media d-flex align-items-center justify-content-between">
-                                                    <div class="post-group">
-                                                        <a href="#" data-toggle="tooltip" data-placement="top" title=""
-                                                           data-original-title="23k followers">
-                                                            <img class="avatar-sm mr-2 img-fluid rounded-circle"
-                                                                 src="{% static 'img/profile-picture-1.jpg' %}"
-                                                                 alt="Jo portrait">
-                                                            Jo
-                                                            J. Moore
-                                                        </a>
-                                                    </div>
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="small"><span
-                                                                class="far fa-calendar-alt mr-2"></span>15 March 2020</span>
-                                                    </div>
-                                                </div>
-                                                <h3 class="h5 card-title mt-4">We partnered up with Google</h3>
-                                                <p class="card-text">Some quick example text to build on the card title
-                                                    and
-                                                    make
-                                                    up
-                                                    the
-                                                    bulk of the card's content.</p>
-                                                <a href="#" class="btn btn-primary btn-sm">Learn More</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-4">
-                                        <div class="card bg-primary border-light shadow-soft">
-                                            <div class="card-header p-3">
-                                                <img src="{% static 'img/blog-article-2.jpg' %}"
-                                                     class="card-img-top rounded"
-                                                     alt="Designer desk">
-                                            </div>
-                                            <div class="card-body pt-2">
-                                                <div class="media d-flex align-items-center justify-content-between">
-                                                    <div class="post-group">
-                                                        <a href="#" data-toggle="tooltip" data-placement="top" title=""
-                                                           data-original-title="23k followers">
-                                                            <img class="avatar-sm mr-2 img-fluid rounded-circle"
-                                                                 src="{% static 'img/profile-picture-2.jpg' %}"
-                                                                 alt="Jo portrait">
-                                                            Jo
-                                                            J. Moore
-                                                        </a>
-                                                    </div>
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="small"><span
-                                                                class="far fa-calendar-alt mr-2"></span>15 March 2020</span>
-                                                    </div>
-                                                </div>
-                                                <h3 class="h5 card-title mt-4">We partnered up with Google</h3>
-                                                <p class="card-text">Some quick example text to build on the card title
-                                                    and
-                                                    make
-                                                    up
-                                                    the
-                                                    bulk of the card's content.</p>
-                                                <a href="#" class="btn btn-primary btn-sm">Learn More</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <p>Bulunamadı</p>
 
                                 {% endif %}
 
                             {% endif %}
 
                         {% elif "product-marka" in request.get_full_path %}
+
                             {% if product_brand_list %}
                                 {% for product in product_brand_list %}
                                     <div class="col-12 col-md-4">
@@ -306,8 +235,11 @@
                             {% else %}
                                 <p class="align-items-lg-center h4 text-danger mx-auto">Ürün Bulunamadı</p>
                             {% endif %}
+
                         {% else %}
+
                             {% if product_category_list %}
+
                                 {% for product in product_category_list %}
                                     <div class="col-12 col-md-4">
                                         <div class="card bg-primary border-light shadow-soft mb-4">
@@ -423,10 +355,12 @@
                                         </div>
                                     </div>
                                 {% endfor %}
+
                             {% else %}
                                 <p class="align-items-lg-center h4 text-danger">Ürün Bulunamadı</p>
                             {% endif %}
                         {% endif %}
+
                     </div>
 
                     {% include "include/paginator.html" %}

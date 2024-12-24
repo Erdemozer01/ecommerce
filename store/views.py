@@ -528,7 +528,10 @@ def MyCartView(request, user, cart_id):
     valid_cart_list = CartItems.objects.filter(cart__cart_id=cart_id, is_valid=True)
     cart_total_products = CartItems.objects.filter(cart__cart_id=cart_id).aggregate(Sum('quantity'))['quantity__sum']
     wish_list_products = Product.objects.filter(wish_list__username=request.user)
-    cart = Cart.objects.get(cart_id=cart_id)
+    try:
+        cart = Cart.objects.get(cart_id=cart_id)
+    except Cart.DoesNotExist:
+        cart = Cart.objects.create(cart_id=cart_id, customer=user)
 
     for items in my_cart_list:
         if items.product.is_discount:
